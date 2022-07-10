@@ -1,4 +1,5 @@
 import 'package:cooking_app_flutter/core/navigation/main_drawer/main_drawer_screen.dart';
+import 'package:cooking_app_flutter/core/navigation/navigator_util.dart';
 import 'package:flutter/material.dart';
 
 // home screen
@@ -83,7 +84,7 @@ class MainDrawer extends StatelessWidget {
         hoverColor: Colors.white70,
         onTap: () {
           onItemClick(screen);
-          Navigator.of(context).pop(); // close drawer
+          NavigatorUtil.mainAppNav.currentState?.pop(); // close drawer
         },
       );
 }

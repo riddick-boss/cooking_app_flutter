@@ -1,15 +1,13 @@
 import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
-import 'package:cooking_app_flutter/features/registration/presentation/registration_screen.dart';
 import 'package:flutter/material.dart';
 
-enum MainDrawerScreen {
-  local,
-  public
-}
+import '../local_dishes/local_dishes_container.dart';
+
+enum MainDrawerScreen { local, public }
 
 extension Title on MainDrawerScreen {
   String get title {
-    switch(this) {
+    switch (this) {
       case MainDrawerScreen.local:
         return AppStrings.localTitle;
       case MainDrawerScreen.public:
@@ -19,10 +17,11 @@ extension Title on MainDrawerScreen {
 }
 
 extension Body on MainDrawerScreen {
-  Widget get body { // todo: widgets
-    switch(this) {
+  Widget get body {
+    // todo: widgets
+    switch (this) {
       case MainDrawerScreen.local:
-        return const RegistrationScreen();
+        return const LocalDishesContainer();
       case MainDrawerScreen.public:
         return Text(title);
     }

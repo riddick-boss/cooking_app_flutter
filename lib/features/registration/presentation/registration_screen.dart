@@ -1,4 +1,5 @@
 import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
+import 'package:cooking_app_flutter/core/navigation/navigator_util.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -65,6 +66,7 @@ class RegistrationScreenState extends State<RegistrationScreen> {
       onPressed: () {
         if(_formKey.currentState!.validate()) {
           Scaffold.of(context).showSnackBar(const SnackBar(content: Text("Processing data")));
+          NavigatorUtil.localDishesNav.currentState!.pushReplacementNamed("/localDishesNav/dishes_list");
         }
       },
       child: const Text(AppStrings.registrationSubmitButton),
