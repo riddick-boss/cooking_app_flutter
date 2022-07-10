@@ -838,7 +838,7 @@ Temporary Items
 #web
 web/firebase-config.js
 
-firebase/firebase_options.dart
+lib/firebase/firebase_options.dart
 
 
 ### ---------------------------- References ---------------------------- ###
