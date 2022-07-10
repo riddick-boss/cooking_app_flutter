@@ -27,22 +27,5 @@ class MyApp extends StatelessWidget {
         routes: {
           "/": (context) => const HomeScreen(),
         },
-        // home: Navigator(
-        //   key: NavigatorUtil.mainAppNav,
-        //   initialRoute: "/",
-        //   onGenerateRoute: (RouteSettings settings) {
-        //     WidgetBuilder builder;
-        //
-        //     switch(settings.name) {
-        //       case "/mainAppNav/main_drawer":
-        //         builder = (BuildContext _) => const HomeScreen();
-        //         break;
-        //       default:
-        //         throw Exception("Invalid route: ${settings.name}");
-        //     }
-        //
-        //     return MaterialPageRoute(builder: builder, settings: settings);
-        //   },
-        // ),
       );
 }
