@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onSignUpClicked() {
-    MainAppNav.navigator.currentState?.pushNamed(MainAppNav.signUpRoute);
+    MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNav.signUpRoute);
   }
 
   @override
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                       validator: (password) {
                         if (password.isNullOrEmpty) {
-                          return AppStrings.loginEnterValidEmailMessage;
+                          return AppStrings.loginEnterPasswordMessage;
                         }
                         return null;
                       },
