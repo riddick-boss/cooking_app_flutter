@@ -1,6 +1,7 @@
 import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/core/assets/theme/colors.dart';
 import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
+import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/dishes_main_drawer_screen.dart';
 import 'package:cooking_app_flutter/features/login/presentation/login_screen.dart';
 import 'package:cooking_app_flutter/features/sign_up/presentation/sign_up_screen.dart';
 import 'package:cooking_app_flutter/firebase/firebase_options.dart';
@@ -14,7 +15,7 @@ Future main() async {
 
   final initialRoute = FirebaseAuth.instance.currentUser == null
       ? MainAppNav.loginRoute
-      : MainAppNav.signUpRoute; // TODO: route to dishes list
+      : MainAppNav.dishesMainDrawerRoute;
 
   runApp(MyApp(
     initialRoute: initialRoute,
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         routes: {
           MainAppNav.loginRoute: (context) => const LoginScreen(),
           MainAppNav.signUpRoute: (context) => const SignUpScreen(),
+          MainAppNav.dishesMainDrawerRoute: (context) => const DishesMainDrawerScreen(),
         },
       );
 }

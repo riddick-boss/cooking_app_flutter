@@ -1,32 +1,19 @@
-import 'package:cooking_app_flutter/core/navigation/main_drawer/main_drawer_screen.dart';
-import 'package:cooking_app_flutter/core/navigation/navigator_util.dart';
+import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
+import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/screens.dart';
 import 'package:flutter/material.dart';
 
-// home screen
-
-class HomeScreen extends StatelessWidget {
-
-  final MainDrawerScreen startScreen = MainDrawerScreen.local;
-
-  const HomeScreen({Key? key}) : super(key: key);
+class DishesMainDrawerScreen extends StatefulWidget {
+  const DishesMainDrawerScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => HomeScreenContent(screen: startScreen);
+  State createState() => _DishesMainDrawerScreenState();
 }
 
-class HomeScreenContent extends StatefulWidget {
-  const HomeScreenContent({Key? key, required this.screen}) : super(key: key);
+class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
 
-  final MainDrawerScreen screen;
+  late DishesMainDrawerScreens _screen = DishesMainDrawerScreens.myDishes;
 
-  @override
-  State createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreenContent> {
-  late MainDrawerScreen _screen = widget.screen;
-
-  void onDrawerItemClick(MainDrawerScreen screen) {
+  void onDrawerItemClick(DishesMainDrawerScreens screen) {
     setState(() {
       _screen = screen;
     });
@@ -49,7 +36,7 @@ class _HomeScreenState extends State<HomeScreenContent> {
 class MainDrawer extends StatelessWidget {
   const MainDrawer({Key? key, required this.onItemClick}) : super(key: key);
 
-  final void Function(MainDrawerScreen screen) onItemClick;
+  final void Function(DishesMainDrawerScreens screen) onItemClick;
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -66,7 +53,7 @@ class MainDrawer extends StatelessWidget {
 
     list.add(const SizedBox(height: 40,));
 
-    for (var element in MainDrawerScreen.values) {
+    for (var element in DishesMainDrawerScreens.values) {
       list.add(buildMenuItem(screen: element, context: context));
     }
 
@@ -75,7 +62,7 @@ class MainDrawer extends StatelessWidget {
     return list;
   }
 
-  Widget buildMenuItem({required MainDrawerScreen screen, required BuildContext context}) =>
+  Widget buildMenuItem({required DishesMainDrawerScreens screen, required BuildContext context}) =>
       ListTile(
         title: Text(
           screen.title,
@@ -84,7 +71,7 @@ class MainDrawer extends StatelessWidget {
         hoverColor: Colors.white70,
         onTap: () {
           onItemClick(screen);
-          NavigatorUtil.mainAppNav.currentState?.pop(); // close drawer
+          MainAppNav.navigator.currentState?.pop(); // close drawer
         },
       );
 }
