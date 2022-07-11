@@ -4,6 +4,7 @@ import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/features/login/presentation/login_screen.dart';
 import 'package:cooking_app_flutter/features/sign_up/presentation/sign_up_screen.dart';
 import 'package:cooking_app_flutter/firebase/firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -11,11 +12,19 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const MyApp());
+  final initialRoute = FirebaseAuth.instance.currentUser == null
+      ? MainAppNav.loginRoute
+      : MainAppNav.signUpRoute; // TODO: route to dishes list
+
+  runApp(MyApp(
+    initialRoute: initialRoute,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.initialRoute}) : super(key: key);
+
+  final String initialRoute;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -25,7 +34,7 @@ class MyApp extends StatelessWidget {
           colorScheme: AppColors.defaultColorScheme,
           primarySwatch: Colors.blue, // TODO
         ),
-        initialRoute: MainAppNav.loginRoute,
+        initialRoute: initialRoute,
         routes: {
           MainAppNav.loginRoute: (context) => const LoginScreen(),
           MainAppNav.signUpRoute: (context) => const SignUpScreen(),

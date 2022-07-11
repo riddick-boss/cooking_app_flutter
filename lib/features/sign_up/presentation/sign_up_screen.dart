@@ -2,6 +2,7 @@ import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/core/util/extension/string_extension.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -13,10 +14,31 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  void onSignUpClicked() {
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future onSignUpClicked() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: sign up
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+        print(FirebaseAuth.instance.currentUser?.email);
+      } catch(e) {
+        print(e.toString());
+        const snackBar = SnackBar(content: Text(AppStrings.signUpFailedToCreateAccount));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
   }
 
@@ -48,6 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: _firstNameController,
                             validator: (name) {
                               if (name.isNullOrEmpty) {
                                 return AppStrings.signUpFirstNameTextFieldHint;
@@ -69,6 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         Expanded(
                           child: TextFormField(
+                            controller: _lastNameController,
                             validator: (name) {
                               if (name.isNullOrEmpty) {
                                 return AppStrings.signUpLastNameTextFieldHint;
@@ -91,6 +115,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 20,
                     ),
                     TextFormField(
+                      controller: _emailController,
                       validator: (email) => EmailValidator.validate(email!)
                           ? null
                           : AppStrings.signUpEnterValidEmailMessage,
@@ -107,6 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 20,
                     ),
                     TextFormField(
+                      controller: _passwordController,
                       validator: (password) {
                         if (password.isNullOrEmpty) {
                           return AppStrings.signUpPasswordTextFieldHint;
