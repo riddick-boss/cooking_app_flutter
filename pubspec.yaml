@@ -13,14 +13,13 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.5
-
   firebase_core: ^1.19.1
-
 # Firebase auth
   firebase_auth: ^3.4.1
-
 # Firebase database
   cloud_firestore: ^3.2.1
+#  Email validator
+  email_validator: ^2.0.1
 
 dev_dependencies:
   flutter_test:

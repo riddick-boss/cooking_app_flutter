@@ -16,4 +16,12 @@ class AppStrings {
   static const registrationIncorrectNameMessage = "Can not be empty!";
   static const registrationSubmitButton = "Submit";
 
+  // login
+  static const loginTitle = "Sign in";
+  static const loginEnterValidEmailMessage = "Please enter valid email";
+  static const loginEmailTextFieldHint = "Enter email";
+  static const loginNotRegisteredYet = "Not registered yet?";
+  static const loginCreateAccountButton = "Sign up";
+  static const loginPasswordTextFieldHint = "Enter password";
+  static const loginSignInButton = "Sign in";
 }
