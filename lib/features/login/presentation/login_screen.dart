@@ -18,14 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _viewModel = getIt<LoginViewModel>();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _viewModel.dispose();
-    super.dispose();
-  }
-
   Future<void> onSignInClicked() async {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text.trim();
@@ -34,6 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void onSignUpClicked() {
+    MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNav.signUpRoute);
+  }
 
   @override
   void initState() {
@@ -49,8 +44,12 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void onSignUpClicked() {
-    MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNav.signUpRoute);
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _viewModel.dispose();
+    super.dispose();
   }
 
   @override

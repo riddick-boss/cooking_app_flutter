@@ -1,12 +1,11 @@
 import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
-import 'package:cooking_app_flutter/core/util/extension/string_extension.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/features/sign_up/presentation/sign_up_vm.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   State createState() => _SignUpScreenState();
@@ -19,6 +18,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  final _viewModel = getIt<SignUpViewModel>();
+
+  Future<void> onSignUpClicked() async {
+    if (_formKey.currentState!.validate()) {
+      final firstName = _firstNameController.text.trim();
+      final lastName = _lastNameController.text.trim();
+      final email = _emailController.text.trim();
+      final password = _passwordController.text.trim();
+      await _viewModel.createUserWithEmailAndPassword(email: email, password: password, firstName: firstName, lastName: lastName);
+    }
+  }
+
+  void onAlreadyRegisteredClicked() {
+    MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNav.loginRoute);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _viewModel.showLoginErrorSnackBarStream.listen((message) {
+      final snackBar = SnackBar(content: Text(message));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
+
+    _viewModel.onNavigateToDishesScreenStream.listen((event) {
+      MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNav.dishesMainDrawerRoute, (route) => false); // clear stack and go to dishes screen
+    });
+  }
 
   @override
   void dispose() {
@@ -26,25 +54,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _lastNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _viewModel.dispose();
     super.dispose();
-  }
-
-  Future onSignUpClicked() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
-        print(FirebaseAuth.instance.currentUser?.email);
-      } catch(e) {
-        print(e.toString());
-        const snackBar = SnackBar(content: Text(AppStrings.signUpFailedToCreateAccount));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-    }
-  }
-
-  void onSignInClicked() {
-    MainAppNav.navigator.currentState
-        ?.pushReplacementNamed(MainAppNav.loginRoute);
   }
 
   @override
@@ -53,7 +64,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
                 AppStrings.signUpTitle,
@@ -71,13 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: TextFormField(
                             controller: _firstNameController,
-                            validator: (name) {
-                              if (name.isNullOrEmpty) {
-                                return AppStrings.signUpFirstNameTextFieldHint;
-                              }
-                              return null;
-                            },
-                            maxLines: 1,
+                            validator: (name) => _viewModel.isFirstNameValid(firstName: name) ? null : AppStrings.signUpFirstNameTextFieldHint,
                             decoration: InputDecoration(
                               hintText: AppStrings.signUpFirstNameTextFieldHint,
                               prefixIcon: const Icon(Icons.person),
@@ -93,13 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Expanded(
                           child: TextFormField(
                             controller: _lastNameController,
-                            validator: (name) {
-                              if (name.isNullOrEmpty) {
-                                return AppStrings.signUpLastNameTextFieldHint;
-                              }
-                              return null;
-                            },
-                            maxLines: 1,
+                            validator: (name) => _viewModel.isLastNameValid(lastName: name) ? null : AppStrings.signUpLastNameTextFieldHint,
                             decoration: InputDecoration(
                               hintText: AppStrings.signUpLastNameTextFieldHint,
                               prefixIcon: const Icon(Icons.person),
@@ -116,13 +114,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       controller: _emailController,
-                      validator: (email) => EmailValidator.validate(email!)
-                          ? null
-                          : AppStrings.signUpEnterValidEmailMessage,
-                      maxLines: 1,
+                      validator: (email) => _viewModel.isEmailValid(email: email) ? null : AppStrings.signUpEnterValidEmailMessage,
                       decoration: InputDecoration(
                         hintText: AppStrings.signUpEmailTextFieldHint,
-                        prefixIcon: Icon(Icons.email),
+                        prefixIcon: const Icon(Icons.email),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -133,13 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       controller: _passwordController,
-                      validator: (password) {
-                        if (password.isNullOrEmpty) {
-                          return AppStrings.signUpPasswordTextFieldHint;
-                        }
-                        return null;
-                      },
-                      maxLines: 1,
+                      validator: (password) => _viewModel.isPasswordValid(password: password) ? null : AppStrings.signUpPasswordTextFieldHint,
                       obscureText: true,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.lock),
@@ -172,9 +161,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: [
                         const Text(AppStrings.signUpAlreadyRegistered),
                         TextButton(
-                          onPressed: onSignInClicked,
-                          child: const Text(
-                              AppStrings.signUpAlreadyRegisteredButton),
+                          onPressed: onAlreadyRegisteredClicked,
+                          child: const Text(AppStrings.signUpAlreadyRegisteredButton),
                         ),
                       ],
                     )

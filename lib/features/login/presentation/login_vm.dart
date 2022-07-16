@@ -35,5 +35,6 @@ class LoginViewModel {
 
   void dispose() {
     _onNavigateToDishesScreenController.close();
+    _showLoginErrorSnackBarController.close();
   }
 }

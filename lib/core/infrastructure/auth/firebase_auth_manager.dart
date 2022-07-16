@@ -15,8 +15,8 @@ class FirebaseAuthManager implements AuthManager {
   AuthUser? get currentUser => _firebaseAuth.currentUser?.toAuthUser();
 
   @override
-  Future<void> signUpWithEmailAndPassword({required String email, required String password}) async {
-    await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+  Future<void> createUserWithEmailAndPassword({required String email, required String password}) async {
+    await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
   }
 
   @override

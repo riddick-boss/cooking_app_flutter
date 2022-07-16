@@ -5,7 +5,7 @@ abstract class AuthManager {
 
   AuthUser? get currentUser;
 
-  Future<void> signUpWithEmailAndPassword({
+  Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
   });
