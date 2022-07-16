@@ -3,5 +3,5 @@ class FirestoreConstants {
 
   static const userFirstNameField = 'first_name';
   static const userLastNameField = 'last_name';
-  static const userAllDishesField = 'all_dishes';
+  static const userAllDishesCollection = 'all_dishes';
 }
