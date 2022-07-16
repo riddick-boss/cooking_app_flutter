@@ -14,18 +14,21 @@ class AppStrings {
 
   // sign up
   static const signUpTitle = "Sign up";
-  static const signUpEnterFirstNameMessage = "Enter name";
-  static const signUpFirstNameTextFieldHint = "First name";
+  static const signUpEnterFirstNameMessage = "Enter name*";
+  static const signUpFirstNameTextFieldHint = "First name*";
   static const signUpEnterLastNameMessage = "Enter name";
   static const signUpLastNameTextFieldHint = "Last name";
   static const signUpEnterValidEmailMessage = "Enter valid email";
-  static const signUpEmailTextFieldHint = "Enter email";
-  static const signUpEnterPasswordMessage = "Enter password";
+  static const signUpEmailTextFieldHint = "Enter email*";
+  static const signUpEnterPasswordMessage = "Enter password*";
   static const signUpPasswordTextFieldHint = "Enter password";
   static const signUpSignUpButton = "Sign up";
   static const signUpAlreadyRegistered = "Already registered?";
   static const signUpAlreadyRegisteredButton = "Sign in";
   static const signUpFailedToCreateAccount = "Failed to create account!";
+
+  // logout
+  static const logoutTitle = "Logout";
 
   // my dishes
   static const String myDishesTitle = "My dishes";

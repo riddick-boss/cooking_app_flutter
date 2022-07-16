@@ -12,20 +12,37 @@ dependencies:
   flutter:
     sdk: flutter
 
+#   Service locator
+  get_it: ^7.2.0
+#   Allows value based equality for our classes e.g Eat() == Eat() is true
+  equatable: ^2.0.3
+#   Generates code by providing annotations
+  injectable: ^1.5.3
+#   Allows converting json to dart class and back
+  json_serializable: ^6.3.1
+  json_annotation: ^4.6.0
+#   Linting
+  very_good_analysis: ^3.0.1
+#   Icons
   cupertino_icons: ^1.0.5
-  firebase_core: ^1.19.1
-# Firebase auth
-  firebase_auth: ^3.4.1
-# Firebase database
-  cloud_firestore: ^3.2.1
-#  Email validator
+#   Data classes generator
+  freezed: ^2.1.0+1
+  freezed_annotation: ^2.1.0
+#   Firebase
+  firebase_core: ^1.19.2
+#   Firebase auth
+  firebase_auth: ^3.4.2
+#   Firebase database
+  cloud_firestore: ^3.3.0
+#   Email validator
   email_validator: ^2.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  moor_generator: ^4.6.0+1
+  build_runner: ^2.2.0
+  injectable_generator: ^1.5.4
 
 flutter:
 

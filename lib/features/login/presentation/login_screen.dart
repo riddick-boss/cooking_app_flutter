@@ -1,12 +1,13 @@
 import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:cooking_app_flutter/core/util/extension/string_extension.dart';
+import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/features/login/presentation/login_vm.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State createState() => _LoginScreenState();
@@ -17,30 +18,41 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  final _viewModel = getIt<LoginViewModel>();
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _viewModel.dispose();
     super.dispose();
   }
 
-  void onSignInClicked() {
+  Future<void> onSignInClicked() async {
     if (_formKey.currentState!.validate()) {
-      try {
-        FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim());
-      } catch (e) {
-        print(e.toString());
-        final snackBar = SnackBar(content: Text(AppStrings.loginFailedToLogin));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
+      final email = _emailController.text.trim();
+      final password = _passwordController.text.trim();
+      await _viewModel.onSignInClicked(email: email, password: password);
     }
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    _viewModel.showLoginErrorSnackBarStream.listen((message) {
+      final snackBar = SnackBar(content: Text(message));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
+
+    _viewModel.onNavigateToDishesScreenStream.listen((event) {
+      MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNav.dishesMainDrawerRoute);
+    });
+  }
+
   void onSignUpClicked() {
-    MainAppNav.navigator.currentState
-        ?.pushReplacementNamed(MainAppNav.signUpRoute);
+    MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNav.signUpRoute);
   }
 
   @override
@@ -49,7 +61,6 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
                 AppStrings.loginTitle,
@@ -70,7 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: (email) => EmailValidator.validate(email!)
                           ? null
                           : AppStrings.loginEnterValidEmailMessage,
-                      maxLines: 1,
                       decoration: InputDecoration(
                         hintText: AppStrings.loginEmailTextFieldHint,
                         prefixIcon: const Icon(Icons.email),
@@ -88,10 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         return null;
                       },
-                      maxLines: 1,
                       obscureText: true,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock),
+                        prefixIcon: const Icon(Icons.lock),
                         hintText: AppStrings.loginPasswordTextFieldHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -129,7 +138,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-  Widget itemSpacingBox() => const SizedBox(
-        height: 20,
-      );
+  Widget itemSpacingBox() => const SizedBox(height: 20);
 }

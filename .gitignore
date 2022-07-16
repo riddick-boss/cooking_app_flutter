@@ -840,6 +840,8 @@ web/firebase-config.js
 
 lib/firebase/firebase_options.dart
 
+*.freezed.dart
+*.config.dart
 
 ### ---------------------------- References ---------------------------- ###
 

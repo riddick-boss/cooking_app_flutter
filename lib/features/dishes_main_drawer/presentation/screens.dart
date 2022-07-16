@@ -1,7 +1,6 @@
+import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-
-import '../../../core/assets/string/app_strings.dart';
 
 enum DishesMainDrawerScreens {
   myDishes,

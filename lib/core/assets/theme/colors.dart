@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const ColorScheme defaultColorScheme = const ColorScheme(// TODO: colors
+  static const ColorScheme defaultColorScheme = ColorScheme(// TODO: colors
     primary: Color(0xffBB86FC),
     secondary: Color(0xff03DAC6),
     surface: Color(0xff181818),

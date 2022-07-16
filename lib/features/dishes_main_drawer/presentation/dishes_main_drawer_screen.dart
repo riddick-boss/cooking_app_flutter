@@ -1,9 +1,10 @@
+import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/screens.dart';
 import 'package:flutter/material.dart';
 
 class DishesMainDrawerScreen extends StatefulWidget {
-  const DishesMainDrawerScreen({Key? key}) : super(key: key);
+  const DishesMainDrawerScreen({super.key});
 
   @override
   State createState() => _DishesMainDrawerScreenState();
@@ -34,7 +35,7 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
 // main drawer
 
 class MainDrawer extends StatelessWidget {
-  const MainDrawer({Key? key, required this.onItemClick}) : super(key: key);
+  const MainDrawer({super.key, required this.onItemClick});
 
   final void Function(DishesMainDrawerScreens screen) onItemClick;
 
@@ -57,7 +58,9 @@ class MainDrawer extends StatelessWidget {
       list.add(buildMenuItem(screen: element, context: context));
     }
 
-    // list.add(const Spacer());
+    list.add(const Spacer());
+
+
 
     return list;
   }
@@ -72,6 +75,24 @@ class MainDrawer extends StatelessWidget {
         onTap: () {
           onItemClick(screen);
           MainAppNav.navigator.currentState?.pop(); // close drawer
+        },
+      );
+}
+
+class LogoutListTile extends StatelessWidget {
+  const LogoutListTile({super.key});
+
+  @override
+  Widget build(BuildContext context) =>
+      ListTile(
+        title: const Text(
+          AppStrings.logoutTitle,
+          style: TextStyle(color: Colors.white), // TODO: color
+        ),
+        hoverColor: Colors.white70,
+        onTap: () {
+        //  TODO: logout
+          MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNav.loginRoute, (route) => false); // clear stack and go to login screen
         },
       );
 }
