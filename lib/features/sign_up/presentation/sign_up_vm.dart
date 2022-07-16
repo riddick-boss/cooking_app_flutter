@@ -23,6 +23,7 @@ class SignUpViewModel {
     try {
       await _authManager.createUserWithEmailAndPassword(email: email, password: password);
       final userDisplayValue = (lastName.isBlankOrEmpty) ? firstName : "$firstName $lastName";
+      await _authManager.updateDisplayNameWithDisplayValue(displayValue: userDisplayValue);
       // TODO: create user bucket in firebase db
       _onNavigateToDishesScreenController.add(Unit());
     } catch(e) {

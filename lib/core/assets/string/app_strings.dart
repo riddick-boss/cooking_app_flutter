@@ -30,6 +30,10 @@ class AppStrings {
   // logout
   static const logoutTitle = "Logout";
 
+  // dishes main drawer
+  static const dishesMainDrawerDefaultWelcomeMessage = "Hi 😃";
+  static String dishesMainDrawerWelcomeMessage(String displayValue) => 'Hi, $displayValue 😃';
+
   // my dishes
   static const String myDishesTitle = "My dishes";
 

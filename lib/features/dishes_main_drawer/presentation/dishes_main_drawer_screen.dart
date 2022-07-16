@@ -1,5 +1,7 @@
 import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
+import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/dishes_main_drawer_vm.dart';
 import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/screens.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,8 @@ class DishesMainDrawerScreen extends StatefulWidget {
 
 class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
 
+  final _viewModel = getIt<DishesMainDrawerViewModel>();
+
   late DishesMainDrawerScreens _screen = DishesMainDrawerScreens.myDishes;
 
   void onDrawerItemClick(DishesMainDrawerScreens screen) {
@@ -21,12 +25,28 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    _viewModel.onNavigateToLogInScreenStream.listen((event) {
+      MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNav.loginRoute, (route) => false); // clear stack and go to login screen
+    });
+  }
+
+
+  @override
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       title: Text(_screen.title),
     ),
     drawer: MainDrawer(
-      onItemClick: onDrawerItemClick,
+      onItemClick: onDrawerItemClick, viewModel: _viewModel,
     ),
     body: _screen.body,
   );
@@ -35,9 +55,11 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
 // main drawer
 
 class MainDrawer extends StatelessWidget {
-  const MainDrawer({super.key, required this.onItemClick});
+  const MainDrawer({super.key, required this.onItemClick, required this.viewModel});
 
   final void Function(DishesMainDrawerScreens screen) onItemClick;
+
+  final DishesMainDrawerViewModel viewModel;
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -49,18 +71,21 @@ class MainDrawer extends StatelessWidget {
     ),
   );
 
-  List<Widget> buildMainMenuList(BuildContext context) {
+  List<Widget> buildMainMenuList(BuildContext context) => [
+        const SizedBox(height: 40),
+        Text((viewModel.userDisplayValue == null) ? AppStrings.dishesMainDrawerDefaultWelcomeMessage : AppStrings.dishesMainDrawerWelcomeMessage(viewModel.userDisplayValue!)),
+        const SizedBox(height: 40),
+        ...buildScreensMenuItems(context),
+        const Spacer(),
+        LogoutListTile(signOut: viewModel.signOut)
+      ];
+
+  List<Widget> buildScreensMenuItems(BuildContext context) {
     final list = <Widget>[];
 
-    list.add(const SizedBox(height: 40,));
-
-    for (var element in DishesMainDrawerScreens.values) {
-      list.add(buildMenuItem(screen: element, context: context));
+    for (final screen in DishesMainDrawerScreens.values) {
+      list.add(buildMenuItem(screen: screen, context: context));
     }
-
-    list.add(const Spacer());
-
-
 
     return list;
   }
@@ -80,7 +105,9 @@ class MainDrawer extends StatelessWidget {
 }
 
 class LogoutListTile extends StatelessWidget {
-  const LogoutListTile({super.key});
+  const LogoutListTile({super.key, required this.signOut});
+
+  final Future<void> Function() signOut;
 
   @override
   Widget build(BuildContext context) =>
@@ -90,9 +117,6 @@ class LogoutListTile extends StatelessWidget {
           style: TextStyle(color: Colors.white), // TODO: color
         ),
         hoverColor: Colors.white70,
-        onTap: () {
-        //  TODO: logout
-          MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNav.loginRoute, (route) => false); // clear stack and go to login screen
-        },
+        onTap: signOut,
       );
 }
