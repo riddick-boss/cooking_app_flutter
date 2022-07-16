@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onSignUpClicked() {
-    MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNav.signUpRoute);
+    MainAppNav.navigator.currentState?.pushNamed(MainAppNav.signUpRoute);
   }
 
   @override
