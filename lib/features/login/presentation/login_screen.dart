@@ -1,9 +1,7 @@
 import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
-import 'package:cooking_app_flutter/core/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/features/login/presentation/login_vm.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -78,9 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     TextFormField(
                       controller: _emailController,
-                      validator: (email) => EmailValidator.validate(email!)
-                          ? null
-                          : AppStrings.loginEnterValidEmailMessage,
+                      validator: (email) => _viewModel.isEmailValid(email: email) ? null : AppStrings.loginEnterValidEmailMessage,
                       decoration: InputDecoration(
                         hintText: AppStrings.loginEmailTextFieldHint,
                         prefixIcon: const Icon(Icons.email),
@@ -92,12 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     itemSpacingBox(),
                     TextFormField(
                       controller: _passwordController,
-                      validator: (password) {
-                        if (password.isNullOrEmpty) {
-                          return AppStrings.loginEnterPasswordMessage;
-                        }
-                        return null;
-                      },
+                      validator: (password) => _viewModel.isPasswordValid(password: password) ? null : AppStrings.loginEnterPasswordMessage,
                       obscureText: true,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.lock),
