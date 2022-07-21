@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/core/domain/auth/manager/auth_manager.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/remote_database.dart';
+import 'package:cooking_app_flutter/core/domain/data/database/remote/manager/remote_database_manager.dart';
 import 'package:cooking_app_flutter/core/domain/util/unit.dart';
 import 'package:cooking_app_flutter/core/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
@@ -13,7 +13,7 @@ import 'package:injectable/injectable.dart';
 @injectable
 class SignUpViewModel {
   final _authManager = getIt<AuthManager>();
-  final _remoteDatabase = getIt<RemoteDatabase>();
+  final _remoteDatabase = getIt<RemoteDatabaseManager>();
 
   final _onNavigateToDishesScreenController = StreamController<Unit>.broadcast();
   Stream<Unit> get onNavigateToDishesScreenStream => _onNavigateToDishesScreenController.stream;

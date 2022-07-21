@@ -49,6 +49,7 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
       onItemClick: onDrawerItemClick, viewModel: _viewModel,
     ),
     body: _screen.body,
+    floatingActionButton: const DishesDrawerFAB(),
   );
 }
 
@@ -119,4 +120,17 @@ class LogoutListTile extends StatelessWidget {
         hoverColor: Colors.white70,
         onTap: signOut,
       );
+}
+
+class DishesDrawerFAB extends StatelessWidget {
+  const DishesDrawerFAB({super.key});
+
+  @override
+  Widget build(BuildContext context) => FloatingActionButton(
+    onPressed: () {
+      MainAppNav.navigator.currentState?.pushNamed(MainAppNav.addDishRoute);
+    },
+    backgroundColor: Colors.indigoAccent,
+    child: const Icon(Icons.add),
+  );
 }
