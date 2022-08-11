@@ -15,6 +15,6 @@ extension FirestoreDishMapper on FirestoreDish {
       dishName: dishName,
       category: category,
       preparationTimeInMinutes: preparationTimeInMinutes,
-      dishId: dishId
+      dishId: dishId,
   );
 }
