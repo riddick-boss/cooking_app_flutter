@@ -38,7 +38,6 @@ class _AddDishScreenState extends State<AddDishScreen> {
     body: Container(
       padding: const EdgeInsets.all(20),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Form(
             key: _formKey,

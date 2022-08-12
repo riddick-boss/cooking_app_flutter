@@ -34,9 +34,24 @@ class FirestoreManager implements RemoteDatabaseManager {
 
   @override
   Future<void> createDish(Dish dish) async {
-    final data = dish.toFirestoreDish().toFirestore();
+    final fireStoreDish = dish.toFirestoreDish();
+    final dishData = fireStoreDish.toFirestore();
+    final ingredients = fireStoreDish.ingredients;
     final allDishesCollection = _userDoc.collection(FirestoreConstants.userAllDishesCollection);
-    await allDishesCollection.add(data)
-        .then((documentSnapshot) => debugPrint("Created dish with ID: ${documentSnapshot.id}"));
+    await allDishesCollection.add(dishData).then((dishDoc) async {
+      debugPrint("Created dish with ID: ${dishDoc.id}");
+
+      final ingredientsCollection = dishDoc.collection(FirestoreConstants.ingredientsCollection);
+      final batch = _fireStore.batch();
+
+      for (final ingredient in ingredients) {
+        final ref = ingredientsCollection.doc();
+        debugPrint("Created ingredient ref: $ref");
+        batch.set(ref, ingredient.toFirestore());
+      }
+
+      await batch.commit();
+      debugPrint("Committed all ingredients");
+    });
   }
 }
