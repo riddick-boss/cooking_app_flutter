@@ -1,5 +1,4 @@
 class Ingredient {
-
   Ingredient({
     required this.name,
     this.quantity,
