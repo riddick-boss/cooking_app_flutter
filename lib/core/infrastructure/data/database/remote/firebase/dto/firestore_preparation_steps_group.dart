@@ -13,7 +13,6 @@ class FireStorePreparationStepsGroup extends Comparable<FireStorePreparationStep
   Map<String, dynamic> toFireStore() => {
     _FireStorePreparationStepsGroupFields.name: name,
     _FireStorePreparationStepsGroupFields.sortOrder: sortOrder,
-    _FireStorePreparationStepsGroupFields.steps: steps,
   };
 
   final String name;
@@ -28,6 +27,5 @@ class FireStorePreparationStepsGroup extends Comparable<FireStorePreparationStep
 class _FireStorePreparationStepsGroupFields {
   static const name = 'name';
   static const sortOrder = 'sortOrder';
-  static const steps = 'steps';
   static const id = 'id';
 }
