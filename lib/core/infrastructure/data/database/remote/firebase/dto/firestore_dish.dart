@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_dish_photo.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_ingredient.dart';
 
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_preparation_steps_group.dart';
@@ -10,6 +11,7 @@ class FirestoreDish {
     required this.category,
     required this.ingredients,
     required this.preparationStepsGroups,
+    required this.photos,
     this.dishId,
   });
 
@@ -18,6 +20,7 @@ class FirestoreDish {
     // SnapshotOptions? options,
     List<FirestoreIngredient> ingredients,
     List<FireStorePreparationStepsGroup> preparationStepsGroups,
+    List<FireStoreDishPhoto> photos,
   ) {
     final data = snapshot.data();
     if(data == null) throw ArgumentError("Dish data from firebase is null!");
@@ -27,6 +30,7 @@ class FirestoreDish {
       category: data[_FirestoreDishFields.category] as String,
       ingredients: ingredients,
       preparationStepsGroups: preparationStepsGroups,
+      photos: photos,
       dishId: data[_FirestoreDishFields.dishId] as String,
     );
   }
@@ -42,6 +46,7 @@ class FirestoreDish {
   final String category;
   final List<FirestoreIngredient> ingredients;
   final List<FireStorePreparationStepsGroup> preparationStepsGroups;
+  final List<FireStoreDishPhoto> photos;
   final String? dishId;
 }
 

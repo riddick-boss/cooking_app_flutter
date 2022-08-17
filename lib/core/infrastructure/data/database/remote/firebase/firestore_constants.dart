@@ -8,4 +8,5 @@ class FirestoreConstants {
   static const ingredientsCollection = 'ingredients';
   static const preparationStepsGroupsCollection = 'preparation_steps_groups';
   static const preparationStepsCollection = 'preparation_steps';
+  static const photosCollection = 'photos';
 }

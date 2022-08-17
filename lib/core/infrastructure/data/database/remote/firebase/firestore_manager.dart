@@ -42,16 +42,14 @@ class FirestoreManager implements RemoteDatabaseManager {
     final ingredients = fireStoreDish.ingredients;
     final preparationStepsGroups = fireStoreDish.preparationStepsGroups;
     final allDishesCollection = _userDoc.collection(FirestoreConstants.userAllDishesCollection);
-    final dishDoc = await allDishesCollection.add(dishData);
+    final dishDoc = await allDishesCollection.add(dishData); // TODO: save public or not
 
     debugPrint("Created dish with ID: ${dishDoc.id}");
 
     await _createIngredients(dishDoc, ingredients);
-    final groupsDocs = await _createPreparationStepsGroupsAndGetDocs(dishDoc, preparationStepsGroups);
+    await _createPreparationStepsAndGroups(dishDoc, preparationStepsGroups);
 
-    groupsDocs.forEach((groupDoc, group) async {
-      await _createPreparationSteps(groupDoc, group.steps);
-    });
+    //tODO: save photos
   }
 
   Future<void> _createIngredients(DocumentReference<Map<String, dynamic>> dishDoc, List<FirestoreIngredient> ingredients) async {
@@ -98,5 +96,13 @@ class FirestoreManager implements RemoteDatabaseManager {
 
     await batch.commit();
     debugPrint("Committed all steps");
+  }
+
+  Future<void> _createPreparationStepsAndGroups(DocumentReference<Map<String, dynamic>> dishDoc, List<FireStorePreparationStepsGroup> groups) async {
+    final groupsDocs = await _createPreparationStepsGroupsAndGetDocs(dishDoc, groups);
+
+    groupsDocs.forEach((groupDoc, group) async {
+      await _createPreparationSteps(groupDoc, group.steps);
+    });
   }
 }

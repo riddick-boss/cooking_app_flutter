@@ -1,5 +1,6 @@
 import 'package:cooking_app_flutter/core/domain/data/database/remote/manager/remote_database_manager.dart';
 import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/dish.dart';
+import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/dish_photo.dart';
 import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/ingredient.dart';
 import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/preparation_step.dart';
 import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/preparation_steps_group.dart';
@@ -23,12 +24,14 @@ class AddDishViewModel {
     final group1 = PreparationStepsGroup(name: "group1", sortOrder: 1, steps: prepSteps1); //TODO: del
     final group2 = PreparationStepsGroup(name: "group2", sortOrder: 2, steps: prepSteps2); //TODO: del
     final groups = [group2, group1]; //TODO: del
+    final photos = <DishPhoto>[];
     final dish = Dish(
       category: category,
       preparationTimeInMinutes: preparationTimeInMinutes,
       dishName: dishName,
       ingredients: [ingredient1, ingredient2], //TODO: from user
       preparationStepsGroups: groups, //TODO: from user
+      photos: photos,
     );
     try {
       await _dbManager.createDish(dish);

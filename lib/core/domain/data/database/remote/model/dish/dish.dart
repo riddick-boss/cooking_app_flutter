@@ -1,3 +1,4 @@
+import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/dish_photo.dart';
 import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/ingredient.dart';
 import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/preparation_steps_group.dart';
 
@@ -9,6 +10,7 @@ class Dish {
     required this.category,
     required this.ingredients,
     required this.preparationStepsGroups,
+    required this.photos,
     this.dishId,
   });
 
@@ -17,5 +19,6 @@ class Dish {
   final String category;
   final List<Ingredient> ingredients;
   final List<PreparationStepsGroup> preparationStepsGroups;
+  final List<DishPhoto> photos;
   final String? dishId;
 }
