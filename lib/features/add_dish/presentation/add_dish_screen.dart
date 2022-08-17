@@ -1,6 +1,11 @@
+import 'package:cooking_app_flutter/core/domain/infrastructure/permissions/permissions_manager.dart';
+import 'package:cooking_app_flutter/core/domain/presentation/widget/platform_aware_image.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/features/add_dish/presentation/add_dish_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+//TODO: reformat
 
 class AddDishScreen extends StatefulWidget {
   const AddDishScreen({super.key});
@@ -16,6 +21,22 @@ class _AddDishScreenState extends State<AddDishScreen> {
   final _preparationTimeController = TextEditingController();
 
   final _viewModel = getIt<AddDishViewModel>();
+
+  final _permissionsManager = getIt<PermissionsManager>();
+  final _imagePicker = getIt<ImagePicker>();
+
+  XFile? _imageFile;
+
+  Future<void> onPickImageClicked() async {
+    if(!(await _permissionsManager.arePhotosPermissionsGranted)) {
+      return; //TODO
+    }
+
+    final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _imageFile = pickedImage;
+    });
+  }
 
   Future<void> onCreateDishClicked() async {
     final dishName = _dishNameController.text;
@@ -99,8 +120,30 @@ class _AddDishScreenState extends State<AddDishScreen> {
                 ),
               ],
             ),
-          )
-        ],
+          ),
+              Expanded(
+                child: Stack(
+                  children: [
+                    Container(
+                      height: double.infinity,
+                      margin:
+                          const EdgeInsets.only(left: 20, right: 20, top: 10),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: _imageFile != null
+                            ? PlatformAwareImage(imagePath: _imageFile!.path)
+                            : IconButton(
+                                onPressed: onPickImageClicked,
+                                icon: const Icon(
+                                  Icons.add_a_photo,
+                                ),
+                              ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
       ),
     ),
   );
