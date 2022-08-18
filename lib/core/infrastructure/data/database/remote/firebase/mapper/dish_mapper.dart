@@ -1,8 +1,8 @@
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/dish.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_dish.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/mapper/dish_photo_mapper.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/mapper/ingredient_mapper.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/mapper/preparation_steps_group_mapper.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish.dart';
 
 extension DishMapper on Dish {
   FirestoreDish toFirestoreDish() => FirestoreDish(

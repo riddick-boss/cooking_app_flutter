@@ -1,4 +1,4 @@
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/preparation_step.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_step.dart';
 
 class PreparationStepsGroup extends Comparable<PreparationStepsGroup> {
   PreparationStepsGroup({

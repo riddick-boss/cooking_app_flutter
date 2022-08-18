@@ -1,6 +1,6 @@
-import 'package:cooking_app_flutter/core/domain/infrastructure/permissions/permissions_manager.dart';
-import 'package:cooking_app_flutter/core/domain/presentation/widget/platform_aware_image.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/permissions/permissions_manager.dart';
+import 'package:cooking_app_flutter/domain/presentation/widget/platform_aware_image.dart';
 import 'package:cooking_app_flutter/features/add_dish/presentation/add_dish_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,7 +28,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
   XFile? _imageFile;
 
   Future<void> onPickImageClicked() async {
-    if(!(await _permissionsManager.arePhotosPermissionsGranted)) {
+    if (!(await _permissionsManager.arePhotosPermissionsGranted)) {
       return; //TODO
     }
 
@@ -144,7 +144,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
                 ),
               )
             ],
-      ),
-    ),
-  );
+          ),
+        ),
+      );
 }

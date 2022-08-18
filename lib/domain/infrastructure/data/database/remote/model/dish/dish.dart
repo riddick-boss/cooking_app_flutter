@@ -1,9 +1,8 @@
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/dish_photo.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/ingredient.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/preparation_steps_group.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish_photo.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/ingredient.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_steps_group.dart';
 
 class Dish {
-
   Dish({
     required this.dishName,
     required this.preparationTimeInMinutes,

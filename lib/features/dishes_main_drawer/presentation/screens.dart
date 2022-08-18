@@ -1,11 +1,8 @@
-import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
+import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
-enum DishesMainDrawerScreens {
-  myDishes,
-  public
-}
+enum DishesMainDrawerScreens { myDishes, public }
 
 extension Title on DishesMainDrawerScreens {
   String get title {

@@ -1,8 +1,7 @@
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/preparation_steps_group.dart';
-
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_preparation_steps_group.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/mapper/preparation_step_mapper.dart';
-import 'package:cooking_app_flutter/core/util/extension/list_extension.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_steps_group.dart';
+import 'package:cooking_app_flutter/domain/util/extension/list_extension.dart';
 
 extension PreparationStepsGroupMapper on PreparationStepsGroup {
   FireStorePreparationStepsGroup toFirestorePreparationStepsGroup() => FireStorePreparationStepsGroup(

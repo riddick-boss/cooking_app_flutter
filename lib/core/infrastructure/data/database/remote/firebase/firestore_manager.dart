@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cooking_app_flutter/core/domain/auth/manager/auth_manager.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/manager/remote_database_manager.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/dish.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_ingredient.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_preparation_step.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_preparation_steps_group.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/firestore_constants.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/mapper/dish_mapper.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_manager.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/manager/remote_database_manager.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
@@ -65,20 +65,20 @@ class FirestoreManager implements RemoteDatabaseManager {
     await batch.commit();
     debugPrint("Committed all ingredients");
   }
-  
+
   Future<Map<DocumentReference<Map<String, dynamic>>, FireStorePreparationStepsGroup>> _createPreparationStepsGroupsAndGetDocs(DocumentReference<Map<String, dynamic>> dishDoc, List<FireStorePreparationStepsGroup> groups) async {
     final groupsCollection = dishDoc.collection(FirestoreConstants.preparationStepsGroupsCollection);
     final batch = _fireStore.batch();
-    
+
     final groupsDocs = <DocumentReference<Map<String, dynamic>>, FireStorePreparationStepsGroup>{};
-    
+
     for(final group in groups) {
       final ref = groupsCollection.doc();
       groupsDocs[ref] = group;
       debugPrint("Created group ref: $ref");
       batch.set(ref, group.toFireStore());
     }
-    
+
     await batch.commit();
     debugPrint("Committed all groups");
     return groupsDocs;

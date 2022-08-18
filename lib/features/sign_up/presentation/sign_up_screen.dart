@@ -1,6 +1,6 @@
-import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
-import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
+import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/features/sign_up/presentation/sign_up_vm.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +26,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       final lastName = _lastNameController.text.trim();
       final email = _emailController.text.trim();
       final password = _passwordController.text.trim();
-      await _viewModel.createUserWithEmailAndPassword(email: email, password: password, firstName: firstName, lastName: lastName);
+      await _viewModel.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+          firstName: firstName,
+          lastName: lastName,
+      );
     }
   }
 
@@ -162,7 +167,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const Text(AppStrings.signUpAlreadyRegistered),
                         TextButton(
                           onPressed: onAlreadyRegisteredClicked,
-                          child: const Text(AppStrings.signUpAlreadyRegisteredButton),
+                          child: const Text(AppStrings.signUpAlreadyRegisteredButton,),
                         ),
                       ],
                     )

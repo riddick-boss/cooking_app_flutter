@@ -1,6 +1,6 @@
-import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
-import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
+import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/dishes_main_drawer_vm.dart';
 import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/screens.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,6 @@ class DishesMainDrawerScreen extends StatefulWidget {
 }
 
 class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
-
   final _viewModel = getIt<DishesMainDrawerViewModel>();
 
   late DishesMainDrawerScreens _screen = DishesMainDrawerScreens.myDishes;
@@ -32,7 +31,6 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
       MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNav.loginRoute, (route) => false); // clear stack and go to login screen
     });
   }
-
 
   @override
   void dispose() {

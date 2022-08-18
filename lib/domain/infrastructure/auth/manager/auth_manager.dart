@@ -1,4 +1,4 @@
-import 'package:cooking_app_flutter/core/domain/auth/model/auth_user.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/auth/model/auth_user.dart';
 
 abstract class AuthManager {
   Stream<AuthUser?> get authState;

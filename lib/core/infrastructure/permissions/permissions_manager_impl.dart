@@ -1,4 +1,4 @@
-import 'package:cooking_app_flutter/core/domain/infrastructure/permissions/permissions_manager.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/permissions/permissions_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';

@@ -1,5 +1,5 @@
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/ingredient.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_ingredient.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/ingredient.dart';
 
 extension IngredientMapper on Ingredient {
   FirestoreIngredient toFirestoreIngredient() => FirestoreIngredient(

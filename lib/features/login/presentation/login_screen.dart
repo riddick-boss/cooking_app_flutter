@@ -1,6 +1,6 @@
-import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
-import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
+import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/features/login/presentation/login_vm.dart';
 import 'package:flutter/material.dart';
 

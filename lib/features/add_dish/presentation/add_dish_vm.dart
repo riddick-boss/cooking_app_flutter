@@ -1,10 +1,10 @@
-import 'package:cooking_app_flutter/core/domain/data/database/remote/manager/remote_database_manager.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/dish.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/dish_photo.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/ingredient.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/preparation_step.dart';
-import 'package:cooking_app_flutter/core/domain/data/database/remote/model/dish/preparation_steps_group.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/manager/remote_database_manager.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish_photo.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/ingredient.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_step.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_steps_group.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
