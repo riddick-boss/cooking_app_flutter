@@ -1,6 +1,8 @@
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish_photo.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/permissions/permissions_manager.dart';
 import 'package:cooking_app_flutter/domain/presentation/widget/platform_aware_image.dart';
+import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
 import 'package:cooking_app_flutter/features/add_dish/presentation/add_dish_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,17 +25,28 @@ class _AddDishScreenState extends State<AddDishScreen> {
   final _permissionsManager = getIt<PermissionsManager>();
   final _imagePicker = getIt<ImagePicker>();
 
-  XFile? _imageFile;
+  List<DishPhoto> _photos = List.empty();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _viewModel.photosStream.listen((photos) {
+      setState(() {
+        _photos = photos;
+      });
+    });
+  }
 
   Future<void> onPickImageClicked() async {
     if (!(await _permissionsManager.arePhotosPermissionsGranted)) {
-      return; //TODO
+      showSnackBar(context, "todo");  // TODO: text as string resource
+      return;
     }
 
     final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _imageFile = pickedImage;
-    });
+    if(pickedImage == null) return;
+    _viewModel.onPhotoAdded(pickedImage.path);
   }
 
   Future<void> onCreateDishClicked() async {
@@ -132,14 +145,12 @@ class _AddDishScreenState extends State<AddDishScreen> {
                           const EdgeInsets.only(left: 20, right: 20, top: 10),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
-                        child: _imageFile != null
-                            ? PlatformAwareImage(imagePath: _imageFile!.path)
-                            : IconButton(
+                        child: _photos.isEmpty
+                            ? IconButton(
                                 onPressed: onPickImageClicked,
-                                icon: const Icon(
-                                  Icons.add_a_photo,
-                                ),
-                              ),
+                                icon: const Icon(Icons.add_a_photo),
+                              )
+                            : PlatformAwareImage(imagePath: _photos.first.photoUrl),
                       ),
                     )
                   ],

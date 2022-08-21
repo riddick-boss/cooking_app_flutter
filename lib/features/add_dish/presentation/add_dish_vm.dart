@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/manager/remote_database_manager.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish.dart';
@@ -7,10 +9,22 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_steps_group.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/subjects.dart';
 
 @injectable
 class AddDishViewModel {
   final _dbManager = getIt<RemoteDatabaseManager>();
+
+  final List<DishPhoto> _photos = List.empty(growable: true);
+
+  late final _photosSubject = BehaviorSubject<List<DishPhoto>>.seeded(_photos);
+  Stream<List<DishPhoto>> get photosStream => _photosSubject.stream;
+
+  void onPhotoAdded(String imagePath) {
+    final newPhoto = DishPhoto(photoUrl: imagePath, sortOrder: _photos.length + 1);
+    _photos.add(newPhoto);
+    _photosSubject.add(_photos);
+  }
 
   Future<void> onCreateDishClicked({
     required String dishName,
@@ -24,14 +38,13 @@ class AddDishViewModel {
     final group1 = PreparationStepsGroup(name: "group1", sortOrder: 1, steps: prepSteps1); //TODO: del
     final group2 = PreparationStepsGroup(name: "group2", sortOrder: 2, steps: prepSteps2); //TODO: del
     final groups = [group2, group1]; //TODO: del
-    final photos = <DishPhoto>[];
     final dish = Dish(
       category: category,
       preparationTimeInMinutes: preparationTimeInMinutes,
       dishName: dishName,
       ingredients: [ingredient1, ingredient2], //TODO: from user
       preparationStepsGroups: groups, //TODO: from user
-      photos: photos,
+      photos: _photos,
     );
     try {
       await _dbManager.createDish(dish);

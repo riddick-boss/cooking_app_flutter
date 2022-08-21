@@ -1,6 +1,7 @@
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
+import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
 import 'package:cooking_app_flutter/features/login/presentation/login_vm.dart';
 import 'package:flutter/material.dart';
 
@@ -35,8 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
 
     _viewModel.showLoginErrorSnackBarStream.listen((message) {
-      final snackBar = SnackBar(content: Text(message));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnackBar(context, message);
     });
 
     _viewModel.onNavigateToDishesScreenStream.listen((event) {

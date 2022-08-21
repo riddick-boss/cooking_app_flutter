@@ -8,6 +8,14 @@ class PlatformAwareImage extends StatelessWidget {
 
   final String imagePath;
 
+  // Image _image() { // TODO: there must be better way to do it
+  //   try {
+  //     return Image.network(imagePath);
+  // } catch(e) {
+  //     return Image.file(File(imagePath));
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     if(kIsWeb) {

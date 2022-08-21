@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 class FireStoreDishPhoto extends Comparable<FireStoreDishPhoto> {
   FireStoreDishPhoto({
     required this.photoUrl,
@@ -7,14 +9,22 @@ class FireStoreDishPhoto extends Comparable<FireStoreDishPhoto> {
 
   //TODO: factory fromFirestore
 
-  Map<String, dynamic> toFirestore() => {
-        _FireStoreDishPhotoFields.photoUrl: photoUrl,
+  Map<String, dynamic> toFirestore(String downloadUrl) => {
+        _FireStoreDishPhotoFields.photoUrl: downloadUrl,
         _FireStoreDishPhotoFields.sortOrder: sortOrder,
       };
 
   final String photoUrl;
   final int sortOrder;
   final String? id;
+
+  XFile? xFile() {
+    try {
+      return XFile(photoUrl);
+    } catch(e) {
+      return null;
+    }
+  }
 
   @override
   int compareTo(FireStoreDishPhoto other) => sortOrder.compareTo(other.sortOrder);
