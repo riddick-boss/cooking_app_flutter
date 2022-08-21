@@ -151,6 +151,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
                                 icon: const Icon(Icons.add_a_photo),
                               )
                             : PlatformAwareImage(imagePath: _photos.first.photoUrl),
+                            // : Image.network(_photos.first.photoUrl),
                       ),
                     )
                   ],
