@@ -1,29 +1,47 @@
 import 'dart:async';
 
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/manager/remote_database_manager.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish_photo.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/ingredient.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_step.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_steps_group.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/permissions/permissions_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/subjects.dart';
 
 @injectable
 class AddDishViewModel {
   final _dbManager = getIt<RemoteDatabaseManager>();
+  final _permissionsManager = getIt<PermissionsManager>();
+  final _imagePicker = getIt<ImagePicker>();
 
-  final List<DishPhoto> _photos = List.empty(growable: true);
+  final _showSnackBarSubject = PublishSubject<String>();
+  Stream<String> get showSnackBarStream => _showSnackBarSubject.stream;
 
-  late final _photosSubject = BehaviorSubject<List<DishPhoto>>.seeded(_photos);
+  final _photosSubject = BehaviorSubject<List<DishPhoto>>.seeded(List.empty(growable: true));
   Stream<List<DishPhoto>> get photosStream => _photosSubject.stream;
 
-  void onPhotoAdded(String imagePath) {
-    final newPhoto = DishPhoto(photoUrl: imagePath, sortOrder: _photos.length + 1);
-    _photos.add(newPhoto);
-    _photosSubject.add(_photos);
+  void _addPhoto(String imagePath) {
+    final photos = _photosSubject.value;
+    final newPhoto = DishPhoto(photoUrl: imagePath, sortOrder: photos.length + 1);
+    final newPhotos = [...photos, ...[newPhoto]];
+    _photosSubject.add(newPhotos);
+  }
+
+  Future<void> onPickPhotoClicked() async {
+    if(!(await _permissionsManager.arePhotosPermissionsGranted)) {
+      _showSnackBarSubject.add(AppStrings.addDishPermissionsDeniedSnackBarMessage);
+      return;
+    }
+    
+    final pickedPhoto = await _imagePicker.pickImage(source: ImageSource.gallery);
+    if(pickedPhoto == null) return;
+    _addPhoto(pickedPhoto.path);
   }
 
   Future<void> onCreateDishClicked({
@@ -44,7 +62,7 @@ class AddDishViewModel {
       dishName: dishName,
       ingredients: [ingredient1, ingredient2], //TODO: from user
       preparationStepsGroups: groups, //TODO: from user
-      photos: _photos,
+      photos: _photosSubject.value,
     );
     try {
       await _dbManager.createDish(dish);

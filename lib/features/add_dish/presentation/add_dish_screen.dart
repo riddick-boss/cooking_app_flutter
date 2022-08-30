@@ -1,11 +1,11 @@
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish_photo.dart';
-import 'package:cooking_app_flutter/domain/infrastructure/permissions/permissions_manager.dart';
 import 'package:cooking_app_flutter/domain/presentation/widget/platform_aware_image.dart';
+import 'package:cooking_app_flutter/domain/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
 import 'package:cooking_app_flutter/features/add_dish/presentation/add_dish_vm.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AddDishScreen extends StatefulWidget {
   const AddDishScreen({super.key});
@@ -22,36 +22,20 @@ class _AddDishScreenState extends State<AddDishScreen> {
 
   final _viewModel = getIt<AddDishViewModel>();
 
-  final _permissionsManager = getIt<PermissionsManager>();
-  final _imagePicker = getIt<ImagePicker>();
-
-  List<DishPhoto> _photos = List.empty();
+  int _currentPhotoIndex = 0;
 
   @override
   void initState() {
     super.initState();
-
-    _viewModel.photosStream.listen((photos) {
-      setState(() {
-        _photos = photos;
-      });
+    
+    _viewModel.showSnackBarStream.listen((message) { 
+      showSnackBar(context, message);
     });
   }
 
-  Future<void> onPickImageClicked() async {
-    if (!(await _permissionsManager.arePhotosPermissionsGranted)) {
-      showSnackBar(context, "todo");  // TODO: text as string resource
-      return;
-    }
-
-    final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
-    if(pickedImage == null) return;
-    _viewModel.onPhotoAdded(pickedImage.path);
-  }
-
   Future<void> onCreateDishClicked() async {
-    final dishName = _dishNameController.text;
-    final category = _categoryController.text;
+    final dishName = _dishNameController.text.trim();
+    final category = _categoryController.text.trim();
     final preparationTime = int.parse(_preparationTimeController.text);
     await _viewModel.onCreateDishClicked(
       dishName: dishName,
@@ -62,15 +46,17 @@ class _AddDishScreenState extends State<AddDishScreen> {
 
   @override
   void dispose() {
-    //  TODO
+    _dishNameController.dispose();
+    _categoryController.dispose();
+    _preparationTimeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text("Add dish"),
-        ), // TODO
+          title: const Text(AppStrings.addDishTitle),
+        ),
         body: Container(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -83,9 +69,9 @@ class _AddDishScreenState extends State<AddDishScreen> {
                     //   child: TextFormField(
                     TextFormField(
                       controller: _dishNameController,
-                      validator: (name) => null, // TODO
+                      validator: (name) => !name.isNullOrEmpty ? null : AppStrings.addDishNameError,
                       decoration: InputDecoration(
-                        hintText: "Dish name", //TODO
+                        hintText: AppStrings.addDishNameHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -97,9 +83,9 @@ class _AddDishScreenState extends State<AddDishScreen> {
                     //   child: TextFormField(
                     TextFormField(
                       controller: _categoryController,
-                      validator: (name) => null, // TODO
+                      validator: (category) => !category.isNullOrEmpty ? null : AppStrings.addDishCategoryError,
                       decoration: InputDecoration(
-                        hintText: "Category", //TODO
+                        hintText: AppStrings.addDishCategoryHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -109,11 +95,11 @@ class _AddDishScreenState extends State<AddDishScreen> {
                     const SizedBox(height: 20),
                     // Expanded(
                     //   child: TextFormField(
-                    TextFormField(
+                    TextFormField( // TODO: use picker
                       controller: _preparationTimeController,
-                      validator: (name) => null, // TODO
+                      validator: (time) => int.parse(time!) > 0 ? null : AppStrings.addDishPreparationTimeError,
                       decoration: InputDecoration(
-                        hintText: "Preparation time", //TODO
+                        hintText: AppStrings.addDishPreparationTimeHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -127,7 +113,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
                         padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                       ),
                       child: const Text(
-                        "Create dish",
+                        AppStrings.addDishCreateButton,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -136,26 +122,32 @@ class _AddDishScreenState extends State<AddDishScreen> {
                   ],
                 ),
               ),
-              Expanded(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: double.infinity,
-                      margin:
-                          const EdgeInsets.only(left: 20, right: 20, top: 10),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: _photos.isEmpty
-                            ? IconButton(
-                                onPressed: onPickImageClicked,
-                                icon: const Icon(Icons.add_a_photo),
-                              )
-                            : PlatformAwareImage(imagePath: _photos.first.photoUrl),
-                            // : Image.network(_photos.first.photoUrl),
-                      ),
-                    )
-                  ],
-                ),
+              StreamBuilder<List<DishPhoto>>(
+                stream: _viewModel.photosStream,
+                builder: (context, snapshot) {
+                  final photos = snapshot.data;
+                  if(photos == null) {
+                    return const SizedBox();
+                  }
+                  return SizedBox(
+                    height: 400,
+                    child: PageView.builder(
+                        itemCount: photos.length + 1, // + 1 for add button
+                        controller: PageController(viewportFraction: 0.7),
+                        onPageChanged: (int i) => setState(() { _currentPhotoIndex = i; }),
+                        itemBuilder: (context, index) => Transform.scale(
+                          scale: index == _currentPhotoIndex ? 1 : 0.9,
+                          child: Card(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            child: index == photos.length
+                              ? IconButton(onPressed: _viewModel.onPickPhotoClicked, icon: const Icon(Icons.add_a_photo))
+                              : PlatformAwareImage(imagePath: photos[index].photoUrl),
+                          ),
+                        ),
+                    ),
+                  );
+                },
               )
             ],
           ),

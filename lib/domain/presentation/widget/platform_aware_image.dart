@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cooking_app_flutter/domain/infrastructure/url_validation/url_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class PlatformAwareImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(kIsWeb || imagePath.startsWith("http")) { // TODO: there must be better way to do it
+    if (kIsWeb || UrlValidator.isValid(imagePath)) {
       return Image.network(imagePath);
     } else {
       return Image.file(File(imagePath));

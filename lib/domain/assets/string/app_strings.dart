@@ -2,36 +2,36 @@ class AppStrings {
   static const String appName = "Cooking App";
 
   // login
-  static const loginTitle = "Sign in";
-  static const loginEnterValidEmailMessage = "Please enter valid email";
-  static const loginEmailTextFieldHint = "Enter email";
-  static const loginNotRegisteredYet = "Not registered yet?";
-  static const loginCreateAccountButton = "Sign up";
-  static const loginPasswordTextFieldHint = "Enter password";
-  static const loginEnterPasswordMessage = "Enter password";
-  static const loginSignInButton = "Sign in";
-  static const loginFailedToLogin = "Failed to login!";
+  static const String loginTitle = "Sign in";
+  static const String loginEnterValidEmailMessage = "Please enter valid email";
+  static const String loginEmailTextFieldHint = "Enter email";
+  static const String loginNotRegisteredYet = "Not registered yet?";
+  static const String loginCreateAccountButton = "Sign up";
+  static const String loginPasswordTextFieldHint = "Enter password";
+  static const String loginEnterPasswordMessage = "Enter password";
+  static const String loginSignInButton = "Sign in";
+  static const String loginFailedToLogin = "Failed to login!";
 
   // sign up
-  static const signUpTitle = "Sign up";
-  static const signUpEnterFirstNameMessage = "Enter name*";
-  static const signUpFirstNameTextFieldHint = "First name*";
-  static const signUpEnterLastNameMessage = "Enter name";
-  static const signUpLastNameTextFieldHint = "Last name";
-  static const signUpEnterValidEmailMessage = "Enter valid email";
-  static const signUpEmailTextFieldHint = "Enter email*";
-  static const signUpEnterPasswordMessage = "Enter password*";
-  static const signUpPasswordTextFieldHint = "Enter password";
-  static const signUpSignUpButton = "Sign up";
-  static const signUpAlreadyRegistered = "Already registered?";
-  static const signUpAlreadyRegisteredButton = "Sign in";
-  static const signUpFailedToCreateAccount = "Failed to create account!";
+  static const String signUpTitle = "Sign up";
+  static const String signUpEnterFirstNameMessage = "Enter name*";
+  static const String signUpFirstNameTextFieldHint = "First name*";
+  static const String signUpEnterLastNameMessage = "Enter name";
+  static const String signUpLastNameTextFieldHint = "Last name";
+  static const String signUpEnterValidEmailMessage = "Enter valid email";
+  static const String signUpEmailTextFieldHint = "Enter email*";
+  static const String signUpEnterPasswordMessage = "Enter password*";
+  static const String signUpPasswordTextFieldHint = "Enter password";
+  static const String signUpSignUpButton = "Sign up";
+  static const String signUpAlreadyRegistered = "Already registered?";
+  static const String signUpAlreadyRegisteredButton = "Sign in";
+  static const String signUpFailedToCreateAccount = "Failed to create account!";
 
   // logout
-  static const logoutTitle = "Logout";
+  static const String logoutTitle = "Logout";
 
   // dishes main drawer
-  static const dishesMainDrawerDefaultWelcomeMessage = "Hi 😃";
+  static const String dishesMainDrawerDefaultWelcomeMessage = "Hi 😃";
   static String dishesMainDrawerWelcomeMessage(String displayValue) => 'Hi, $displayValue 😃';
 
   // my dishes
@@ -39,4 +39,15 @@ class AppStrings {
 
   // public
   static const String publicTitle = "Public"; // todo: change text
+
+  // add dish
+  static const String addDishTitle = "Add dish";
+  static const String addDishPermissionsDeniedSnackBarMessage = "Cannot perform this operation without permissions!";
+  static const String addDishNameHint = "Dish name";
+  static const String addDishNameError = "Name cannot be empty";
+  static const String addDishCategoryHint = "Category";
+  static const String addDishCategoryError = "Category cannot be empty";
+  static const String addDishPreparationTimeHint = "Preparation time";
+  static const String addDishPreparationTimeError = "Time must be greater than 0";
+  static const String addDishCreateButton = "Create dish";
 }
