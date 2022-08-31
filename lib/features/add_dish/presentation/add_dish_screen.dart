@@ -1,6 +1,5 @@
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
-import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish_photo.dart';
 import 'package:cooking_app_flutter/domain/presentation/widget/platform_aware_image.dart';
 import 'package:cooking_app_flutter/domain/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
@@ -27,8 +26,8 @@ class _AddDishScreenState extends State<AddDishScreen> {
   @override
   void initState() {
     super.initState();
-    
-    _viewModel.showSnackBarStream.listen((message) { 
+
+    _viewModel.showSnackBarStream.listen((message) {
       showSnackBar(context, message);
     });
   }
@@ -69,7 +68,9 @@ class _AddDishScreenState extends State<AddDishScreen> {
                     //   child: TextFormField(
                     TextFormField(
                       controller: _dishNameController,
-                      validator: (name) => !name.isNullOrEmpty ? null : AppStrings.addDishNameError,
+                      validator: (name) => !name.isNullOrEmpty
+                          ? null
+                          : AppStrings.addDishNameError,
                       decoration: InputDecoration(
                         hintText: AppStrings.addDishNameHint,
                         border: OutlineInputBorder(
@@ -83,7 +84,9 @@ class _AddDishScreenState extends State<AddDishScreen> {
                     //   child: TextFormField(
                     TextFormField(
                       controller: _categoryController,
-                      validator: (category) => !category.isNullOrEmpty ? null : AppStrings.addDishCategoryError,
+                      validator: (category) => !category.isNullOrEmpty
+                          ? null
+                          : AppStrings.addDishCategoryError,
                       decoration: InputDecoration(
                         hintText: AppStrings.addDishCategoryHint,
                         border: OutlineInputBorder(
@@ -95,9 +98,12 @@ class _AddDishScreenState extends State<AddDishScreen> {
                     const SizedBox(height: 20),
                     // Expanded(
                     //   child: TextFormField(
-                    TextFormField( // TODO: use picker
+                    TextFormField(
+                      // TODO: use picker
                       controller: _preparationTimeController,
-                      validator: (time) => int.parse(time!) > 0 ? null : AppStrings.addDishPreparationTimeError,
+                      validator: (time) => int.parse(time!) > 0
+                          ? null
+                          : AppStrings.addDishPreparationTimeError,
                       decoration: InputDecoration(
                         hintText: AppStrings.addDishPreparationTimeHint,
                         border: OutlineInputBorder(
@@ -122,29 +128,47 @@ class _AddDishScreenState extends State<AddDishScreen> {
                   ],
                 ),
               ),
-              StreamBuilder<List<DishPhoto>>(
-                stream: _viewModel.photosStream,
+              // StreamBuilder<List<Ingredient>>(
+              //   stream: _viewModel.ingredients,
+              //   builder: (context, snapshot) {
+              //     final ingredients = snapshot.data;
+              //     if (ingredients == null) {
+              //       return const SizedBox();
+              //     }
+              //     return const SizedBox();
+              //     // return ; TODO
+              //   },
+              // ),
+              StreamBuilder<List<String>>(
+                stream: _viewModel.photosPathsStream,
                 builder: (context, snapshot) {
                   final photos = snapshot.data;
-                  if(photos == null) {
+                  if (photos == null) {
                     return const SizedBox();
                   }
                   return SizedBox(
                     height: 400,
                     child: PageView.builder(
-                        itemCount: photos.length + 1, // + 1 for add button
-                        controller: PageController(viewportFraction: 0.7),
-                        onPageChanged: (int i) => setState(() { _currentPhotoIndex = i; }),
-                        itemBuilder: (context, index) => Transform.scale(
-                          scale: index == _currentPhotoIndex ? 1 : 0.9,
-                          child: Card(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                            child: index == photos.length
-                              ? IconButton(onPressed: _viewModel.onPickPhotoClicked, icon: const Icon(Icons.add_a_photo))
-                              : PlatformAwareImage(imagePath: photos[index].photoUrl),
+                      itemCount: photos.length + 1, // + 1 for add button
+                      controller: PageController(viewportFraction: 0.7),
+                      onPageChanged: (int i) => setState(() {
+                        _currentPhotoIndex = i;
+                      }),
+                      itemBuilder: (context, index) => Transform.scale(
+                        scale: index == _currentPhotoIndex ? 1 : 0.9,
+                        child: Card(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
+                          child: index == photos.length
+                              ? IconButton(
+                                  onPressed: _viewModel.onPickPhotoClicked,
+                                  icon: const Icon(Icons.add_a_photo),
+                                )
+                              : PlatformAwareImage(imagePath: photos[index]),
                         ),
+                      ),
                     ),
                   );
                 },
