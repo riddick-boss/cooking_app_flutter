@@ -52,4 +52,7 @@ class AppStrings {
   static const String addDishCreateButton = "Create dish";
   static const String addDishIngredientsHeader = "Ingredients";
   static const String addDishIngredientNameLabel = "Ingredient name";
+  static const String addDishIngredientQuantityLabel = "Quantity";
+  static const String addDishPreparationStepsGroupsHeader = "Preparation steps";
+  static const String addDishStepsGroupNameLabel = "Steps group name";
 }

@@ -55,6 +55,13 @@ class AddDishViewModel {
   void onNewIngredientNameChanged(String value) {
     _newIngredientName.add(value);
   }
+
+  final _newIngredientQuantity = BehaviorSubject<String?>.seeded(null);
+  Stream<String?> get newIngredientQuantity => _newIngredientQuantity.stream; // TODO: needed?
+
+  void onNewIngredientQuantityChanged(String value) {
+    _newIngredientQuantity.add(value);
+  }
   
   final _ingredients = BehaviorSubject<List<Ingredient>>.seeded(List.empty());
   Stream<List<Ingredient>> get ingredients => _ingredients.stream;
@@ -64,8 +71,9 @@ class AddDishViewModel {
 
   void onAddIngredientClicked() {
     final name = _newIngredientName.value;
+    final quantity = _newIngredientQuantity.value;
     if (name.isEmpty) return;
-    _ingredients.addElement(Ingredient(name: name, quantity: null)); // TODO
+    _ingredients.addElement(Ingredient(name: name, quantity: quantity));
     _clearNewIngredientTextFields.add(Unit());
   }
 
@@ -78,13 +86,37 @@ class AddDishViewModel {
     _ingredients.add(list);
   }
 
+  final _preparationStepsGroups = BehaviorSubject<Map<String, List<String>>>.seeded({});
+  Stream<Map<String, List<String>>> get preparationStepsGroups => _preparationStepsGroups.stream;
+
+  final _newPreparationStepsGroupName = BehaviorSubject<String>.seeded("");
+  Stream<String> get newPreparationStepsGroupName => _newPreparationStepsGroupName.stream; // TODO: needed?
+
+  void onNewPreparationStepsGroupNameChanged(String value) {
+    _newPreparationStepsGroupName.add(value);
+  }
+
+  final _clearNewPreparationStepsGroupTextField = PublishSubject<Unit>();
+  Stream<Unit> get clearNewPreparationStepsGroupTextField => _clearNewPreparationStepsGroupTextField.stream;
+
+  void onAddPreparationStepsGroupClicked() {
+    final name = _newPreparationStepsGroupName.value;
+    if (name.isEmpty || _preparationStepsGroups.value.containsKey(name)) return;
+    final newMap = Map<String, List<String>>.from(_preparationStepsGroups.value)..[name] = List<String>.empty();
+    _preparationStepsGroups.add(newMap);
+    _clearNewPreparationStepsGroupTextField.add(Unit());
+  }
+
+  void onRemovePreparationStepsGroupClicked(String key) {
+    final newMap = Map<String, List<String>>.from(_preparationStepsGroups.value)..remove(key);
+    _preparationStepsGroups.add(newMap);
+  }
+
   Future<void> onCreateDishClicked({
     required String dishName,
     required int preparationTimeInMinutes,
     required String category,
   }) async {
-    final ingredient1 = Ingredient(name: "name1", quantity: "quantity1"); //TODO: del
-    final ingredient2 = Ingredient(name: "name2"); // TODO: del
     final prepSteps1 = [PreparationStep(name: "step2", sortOrder: 2), PreparationStep(name: "step1", sortOrder: 1)]; //TODO: del
     final prepSteps2 = [PreparationStep(name: "1step", sortOrder: 1), PreparationStep(name: "2step", sortOrder: 2)]; //TODO: del
     final group1 = PreparationStepsGroup(name: "group1", sortOrder: 1, steps: prepSteps1); //TODO: del
@@ -94,10 +126,8 @@ class AddDishViewModel {
       category: category,
       preparationTimeInMinutes: preparationTimeInMinutes,
       dishName: dishName,
-      // ingredients: [ingredient1, ingredient2], //TODO: from user
       ingredients: _ingredients.value,
-      preparationStepsGroups: groups,
-      //TODO: from user
+      preparationStepsGroups: groups, //TODO: from user
       photos: _createDishPhotosList(_photosPaths.value),
     );
     try {
@@ -108,24 +138,4 @@ class AddDishViewModel {
       //TODO: show  info to user
     }
   }
-
-// Future<void> onCreateDishClicked({
-//   required String dishName,
-//   required int preparationTimeInMinutes,
-//   required String category,
-// }) async {
-//   final dish = Dish(
-//       category: category,
-//       preparationTimeInMinutes: preparationTimeInMinutes,
-//       dishName: dishName,
-//       ingredients: [], //TODO
-//   );
-//   try {
-//     await _dbManager.createDish(dish);
-//     // TODO: show info to user
-//   } catch(e) {
-//     debugPrint("error during dish creation: $e");
-//     //TODO: show  info to user
-//   }
-// }
 }

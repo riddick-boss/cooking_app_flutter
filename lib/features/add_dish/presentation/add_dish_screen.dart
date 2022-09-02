@@ -20,6 +20,8 @@ class _AddDishScreenState extends State<AddDishScreen> {
   final _categoryController = TextEditingController();
   final _preparationTimeController = TextEditingController();
   final _ingredientNameController = TextEditingController();
+  final _ingredientQuantityController = TextEditingController();
+  final _stepsGroupNameController = TextEditingController();
 
   final _viewModel = getIt<AddDishViewModel>();
 
@@ -35,6 +37,11 @@ class _AddDishScreenState extends State<AddDishScreen> {
 
     _viewModel.clearNewIngredientTextFields.listen((event) {
       _ingredientNameController.clear();
+      _ingredientQuantityController.clear();
+    });
+
+    _viewModel.clearNewPreparationStepsGroupTextField.listen((event) {
+      _stepsGroupNameController.clear();
     });
   }
 
@@ -55,6 +62,8 @@ class _AddDishScreenState extends State<AddDishScreen> {
     _categoryController.dispose();
     _preparationTimeController.dispose();
     _ingredientNameController.dispose();
+    _ingredientQuantityController.dispose();
+    _stepsGroupNameController.dispose();
     super.dispose();
   }
 
@@ -71,8 +80,6 @@ class _AddDishScreenState extends State<AddDishScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    // Expanded(
-                    //   child: TextFormField(
                     TextFormField(
                       controller: _dishNameController,
                       validator: (name) => !name.isNullOrEmpty
@@ -85,10 +92,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
                         ),
                       ),
                     ),
-                    // ),
                     const SizedBox(height: 20),
-                    // Expanded(
-                    //   child: TextFormField(
                     TextFormField(
                       controller: _categoryController,
                       validator: (category) => !category.isNullOrEmpty
@@ -101,10 +105,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
                         ),
                       ),
                     ),
-                    // ),
                     const SizedBox(height: 20),
-                    // Expanded(
-                    //   child: TextFormField(
                     TextFormField(
                       // TODO: use picker
                       controller: _preparationTimeController,
@@ -118,23 +119,10 @@ class _AddDishScreenState extends State<AddDishScreen> {
                         ),
                       ),
                     ),
-                    // ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: onCreateDishClicked,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
-                      ),
-                      child: const Text(
-                        AppStrings.addDishCreateButton,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
               StreamBuilder<List<Ingredient>>(
                 stream: _viewModel.ingredients,
                 builder: (context, snapshot) {
@@ -152,25 +140,82 @@ class _AddDishScreenState extends State<AddDishScreen> {
                           ListTile(
                             key: ValueKey(ingredient.hashCode),
                             title: Text(ingredient.name),
+                            subtitle: ingredient.quantity.isNullOrEmpty
+                              ? null
+                             : Text(ingredient.quantity!),
                             trailing: IconButton(onPressed: () { _viewModel.onRemoveIngredientClicked(ingredient); }, icon: const Icon(Icons.remove)),
                           )
                       ],
                   );
                 },
               ),
-              //TODO: text fields to ad ingredient
               Row(
                 children: [
                   Expanded(
-                      child: TextField(
-                        controller: _ingredientNameController,
-                        onChanged: _viewModel.onNewIngredientNameChanged,
-                        decoration: const InputDecoration(labelText: AppStrings.addDishIngredientNameLabel),
-                      ),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _ingredientNameController,
+                          onChanged: _viewModel.onNewIngredientNameChanged,
+                          decoration: const InputDecoration(labelText: AppStrings.addDishIngredientNameLabel),
+                        ),
+                        TextField(
+                          controller: _ingredientQuantityController,
+                          onChanged: _viewModel.onNewIngredientQuantityChanged,
+                          decoration: const InputDecoration(labelText: AppStrings.addDishIngredientQuantityLabel),
+                        ),
+                      ],
+                    ),
                   ),
                   IconButton(onPressed: _viewModel.onAddIngredientClicked, icon: const Icon(Icons.add))
                 ],
               ),
+              //TODO: del after
+              const SizedBox(height: 20),
+              const SizedBox(
+                  width: double.infinity,
+                  child: Text(AppStrings.addDishPreparationStepsGroupsHeader),
+              ),
+              const SizedBox(height: 20),
+              StreamBuilder<Map<String, List<String>>>(
+                stream: _viewModel.preparationStepsGroups,
+                builder: (context, snapshot) {
+                  final preparationStepsGroups = snapshot.data;
+                  if (preparationStepsGroups == null) {
+                    return const SizedBox(height: 0);
+                  }
+                  return ListView(
+                    physics: const ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    children: preparationStepsGroups.entries.map((entry) {
+                      final name = entry.key;
+                      final steps = entry.value;
+                      return ListTile(
+                        key: ValueKey(name),
+                        title: Text(name),
+                        trailing: IconButton(
+                            onPressed: () { _viewModel.onRemovePreparationStepsGroupClicked(name); },
+                            icon: const Icon(Icons.remove),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _stepsGroupNameController,
+                      onChanged: _viewModel.onNewPreparationStepsGroupNameChanged,
+                      decoration: const InputDecoration(labelText: AppStrings.addDishStepsGroupNameLabel),
+                    ),
+                  ),
+                  IconButton(onPressed: _viewModel.onAddPreparationStepsGroupClicked, icon: const Icon(Icons.add))
+                ],
+              ),
+              const SizedBox(height: 20),
+              //TODO: del after
               StreamBuilder<List<String>>(
                 stream: _viewModel.photosPathsStream,
                 builder: (context, snapshot) {
@@ -204,7 +249,20 @@ class _AddDishScreenState extends State<AddDishScreen> {
                     ),
                   );
                 },
-              )
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: onCreateDishClicked,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+                ),
+                child: const Text(
+                  AppStrings.addDishCreateButton,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
