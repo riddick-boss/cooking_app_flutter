@@ -50,4 +50,6 @@ class AppStrings {
   static const String addDishPreparationTimeHint = "Preparation time";
   static const String addDishPreparationTimeError = "Time must be greater than 0";
   static const String addDishCreateButton = "Create dish";
+  static const String addDishIngredientsHeader = "Ingredients";
+  static const String addDishIngredientNameLabel = "Ingredient name";
 }

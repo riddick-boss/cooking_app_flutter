@@ -11,6 +11,8 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_steps_group.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/permissions/permissions_manager.dart';
 import 'package:cooking_app_flutter/domain/util/extension/behavior_subject_list_extension.dart';
+import 'package:cooking_app_flutter/domain/util/extension/list_extension.dart';
+import 'package:cooking_app_flutter/domain/util/unit.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
@@ -47,16 +49,33 @@ class AddDishViewModel {
     _photosPaths.removeElement(path);
   }
 
+  final _newIngredientName = BehaviorSubject<String>.seeded("");
+  Stream<String> get newIngredientName => _newIngredientName.stream; // TODO: needed?
+
+  void onNewIngredientNameChanged(String value) {
+    _newIngredientName.add(value);
+  }
+  
   final _ingredients = BehaviorSubject<List<Ingredient>>.seeded(List.empty());
   Stream<List<Ingredient>> get ingredients => _ingredients.stream;
 
-  void onAddIngredientClicked(String name, String? quantity) {
+  final _clearNewIngredientTextFields = PublishSubject<Unit>();
+  Stream<Unit> get clearNewIngredientTextFields => _clearNewIngredientTextFields.stream;
+
+  void onAddIngredientClicked() {
+    final name = _newIngredientName.value;
     if (name.isEmpty) return;
-    _ingredients.addElement(Ingredient(name: name, quantity: quantity));
+    _ingredients.addElement(Ingredient(name: name, quantity: null)); // TODO
+    _clearNewIngredientTextFields.add(Unit());
   }
 
   void onRemoveIngredientClicked(Ingredient ingredient) {
     _ingredients.removeElement(ingredient);
+  }
+
+  void onIngredientsReordered(int oldIdx, int newIdx) {
+    final list = List<Ingredient>.from(_ingredients.value)..reorder(oldIdx, newIdx);
+    _ingredients.add(list);
   }
 
   Future<void> onCreateDishClicked({

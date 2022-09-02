@@ -1,5 +1,6 @@
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/ingredient.dart';
 import 'package:cooking_app_flutter/domain/presentation/widget/platform_aware_image.dart';
 import 'package:cooking_app_flutter/domain/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
@@ -18,6 +19,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
   final _dishNameController = TextEditingController();
   final _categoryController = TextEditingController();
   final _preparationTimeController = TextEditingController();
+  final _ingredientNameController = TextEditingController();
 
   final _viewModel = getIt<AddDishViewModel>();
 
@@ -29,6 +31,10 @@ class _AddDishScreenState extends State<AddDishScreen> {
 
     _viewModel.showSnackBarStream.listen((message) {
       showSnackBar(context, message);
+    });
+
+    _viewModel.clearNewIngredientTextFields.listen((event) {
+      _ingredientNameController.clear();
     });
   }
 
@@ -48,6 +54,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
     _dishNameController.dispose();
     _categoryController.dispose();
     _preparationTimeController.dispose();
+    _ingredientNameController.dispose();
     super.dispose();
   }
 
@@ -56,7 +63,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
         appBar: AppBar(
           title: const Text(AppStrings.addDishTitle),
         ),
-        body: Container(
+        body: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
@@ -128,23 +135,48 @@ class _AddDishScreenState extends State<AddDishScreen> {
                   ],
                 ),
               ),
-              // StreamBuilder<List<Ingredient>>(
-              //   stream: _viewModel.ingredients,
-              //   builder: (context, snapshot) {
-              //     final ingredients = snapshot.data;
-              //     if (ingredients == null) {
-              //       return const SizedBox();
-              //     }
-              //     return const SizedBox();
-              //     // return ; TODO
-              //   },
-              // ),
+              StreamBuilder<List<Ingredient>>(
+                stream: _viewModel.ingredients,
+                builder: (context, snapshot) {
+                  final ingredients = snapshot.data;
+                  if (ingredients == null) {
+                    return const Text(AppStrings.addDishIngredientsHeader);
+                  }
+                  return ReorderableListView(
+                      physics: const ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      onReorder: _viewModel.onIngredientsReordered,
+                      header: const Text(AppStrings.addDishIngredientsHeader),
+                      children: <Widget>[
+                        for(final ingredient in ingredients)
+                          ListTile(
+                            key: ValueKey(ingredient.hashCode),
+                            title: Text(ingredient.name),
+                            trailing: IconButton(onPressed: () { _viewModel.onRemoveIngredientClicked(ingredient); }, icon: const Icon(Icons.remove)),
+                          )
+                      ],
+                  );
+                },
+              ),
+              //TODO: text fields to ad ingredient
+              Row(
+                children: [
+                  Expanded(
+                      child: TextField(
+                        controller: _ingredientNameController,
+                        onChanged: _viewModel.onNewIngredientNameChanged,
+                        decoration: const InputDecoration(labelText: AppStrings.addDishIngredientNameLabel),
+                      ),
+                  ),
+                  IconButton(onPressed: _viewModel.onAddIngredientClicked, icon: const Icon(Icons.add))
+                ],
+              ),
               StreamBuilder<List<String>>(
                 stream: _viewModel.photosPathsStream,
                 builder: (context, snapshot) {
                   final photos = snapshot.data;
                   if (photos == null) {
-                    return const SizedBox();
+                    return const SizedBox(height: 20,);
                   }
                   return SizedBox(
                     height: 400,
