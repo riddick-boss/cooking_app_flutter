@@ -28,6 +28,20 @@ class AddDishViewModel {
   final _showSnackBarSubject = PublishSubject<String>();
   Stream<String> get showSnackBarStream => _showSnackBarSubject.stream;
 
+  final _dishName = BehaviorSubject<String>.seeded('');
+  Stream<String> get dishName => _dishName.stream;
+
+  void onDishNameChanged(String value) {
+    _dishName.add(value);
+  }
+
+  final _dishCategory = BehaviorSubject<String>.seeded('');
+  Stream<String> get dishCategory => _dishCategory.stream;
+
+  void onDishCategoryChanged(String value) {
+    _dishCategory.add(value);
+  }
+
   final _preparationTime = BehaviorSubject<int>.seeded(0);
   Stream<int> get preparationTime => _preparationTime.stream;
 
@@ -175,14 +189,11 @@ class AddDishViewModel {
   List<PreparationStep> _createPreparationSteps(List<String> stepsNames) =>
       stepsNames.mapIndexed((index, name) => PreparationStep(name: name, sortOrder: index)).toList();
 
-  Future<void> onCreateDishClicked({
-    required String dishName,
-    required String category,
-  }) async {
+  Future<void> onCreateDishClicked() async {
     final dish = Dish(
-      category: category,
+      category: _dishCategory.value,
       preparationTimeInMinutes: _preparationTime.value,
-      dishName: dishName,
+      dishName: _dishName.value,
       ingredients: _ingredients.value,
       preparationStepsGroups: _createPreparationStepsGroups(),
       photos: _createDishPhotosList(_photosPaths.value),

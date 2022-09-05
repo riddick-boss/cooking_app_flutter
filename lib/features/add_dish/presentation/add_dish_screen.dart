@@ -17,7 +17,6 @@ class AddDishScreen extends StatefulWidget {
 }
 
 class _AddDishScreenState extends State<AddDishScreen> {
-  final _formKey = GlobalKey<FormState>();
   final _dishNameController = TextEditingController();
   final _categoryController = TextEditingController();
   final _ingredientNameController = TextEditingController();
@@ -28,7 +27,10 @@ class _AddDishScreenState extends State<AddDishScreen> {
 
   int _currentPhotoIndex = 0;
 
-  final _preparationTimeRange = List<Text>.generate(500, (i) => Text("$i"));
+  static const int _preparationTimeMaxRange = 500;
+  final _preparationTimeRange = List<Text>.generate(_preparationTimeMaxRange, (i) => Text("$i"));
+
+  static const double _columnGap = 20;
 
   @override
   void initState() {
@@ -48,13 +50,8 @@ class _AddDishScreenState extends State<AddDishScreen> {
     });
   }
 
-  Future<void> onCreateDishClicked() async {
-    final dishName = _dishNameController.text.trim();
-    final category = _categoryController.text.trim();
-    await _viewModel.onCreateDishClicked(
-      dishName: dishName,
-      category: category,
-    );
+  void onCreateDishClicked() {
+    _viewModel.onCreateDishClicked();
   }
 
   @override
@@ -76,39 +73,18 @@ class _AddDishScreenState extends State<AddDishScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _dishNameController,
-                      validator: (name) => !name.isNullOrEmpty
-                          ? null
-                          : AppStrings.addDishNameError,
-                      decoration: InputDecoration(
-                        hintText: AppStrings.addDishNameHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _categoryController,
-                      validator: (category) => !category.isNullOrEmpty
-                          ? null
-                          : AppStrings.addDishCategoryError,
-                      decoration: InputDecoration(
-                        hintText: AppStrings.addDishCategoryHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              TextField(
+                controller: _dishNameController,
+                onChanged: _viewModel.onDishNameChanged,
+                decoration: const InputDecoration(labelText: AppStrings.addDishNameHint),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: _columnGap),
+              TextField(
+                controller: _categoryController,
+                onChanged: _viewModel.onDishCategoryChanged,
+                decoration: const InputDecoration(labelText: AppStrings.addDishCategoryHint),
+              ),
+              const SizedBox(height: _columnGap),
               StreamBuilder<int>(
                   stream: _viewModel.preparationTime,
                   builder: (context, snapshot) {
@@ -133,7 +109,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
                     );
                   },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: _columnGap),
               StreamBuilder<List<Ingredient>>(
                 stream: _viewModel.ingredients,
                 builder: (context, snapshot) {
@@ -181,12 +157,12 @@ class _AddDishScreenState extends State<AddDishScreen> {
                   IconButton(onPressed: _viewModel.onAddIngredientClicked, icon: const Icon(Icons.add))
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: _columnGap),
               const SizedBox(
                   width: double.infinity,
                   child: Text(AppStrings.addDishPreparationStepsGroupsHeader),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: _columnGap),
               StreamBuilder<Map<String, List<String>>>(
                 stream: _viewModel.preparationStepsGroups,
                 builder: (context, snapshot) {
@@ -227,7 +203,6 @@ class _AddDishScreenState extends State<AddDishScreen> {
                             children: [
                               Expanded(
                                 child: TextField(
-                                  // controller: _stepsGroupNameController,
                                   onChanged: _viewModel.onNewPreparationStepNameChanged,
                                   decoration: const InputDecoration(labelText: AppStrings.addDishStepLabel),
                                 ),
@@ -235,7 +210,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
                               IconButton(onPressed: () { _viewModel.onPreparationStepAdded(groupName); }, icon: const Icon(Icons.add))
                             ],
                           ),
-                          const SizedBox(height: 20,)
+                          const SizedBox(height: _columnGap,)
                         ],
                       );
                     }).toList(),
@@ -254,13 +229,13 @@ class _AddDishScreenState extends State<AddDishScreen> {
                   IconButton(onPressed: _viewModel.onAddPreparationStepsGroupClicked, icon: const Icon(Icons.add))
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: _columnGap),
               StreamBuilder<List<String>>(
                 stream: _viewModel.photosPathsStream,
                 builder: (context, snapshot) {
                   final photos = snapshot.data;
                   if (photos == null) {
-                    return const SizedBox(height: 20,);
+                    return const SizedBox(height: 0,);
                   }
                   return SizedBox(
                     height: 400,
@@ -289,7 +264,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
                   );
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: _columnGap),
               ElevatedButton(
                 onPressed: onCreateDishClicked,
                 style: ElevatedButton.styleFrom(
