@@ -55,4 +55,5 @@ class AppStrings {
   static const String addDishIngredientQuantityLabel = "Quantity";
   static const String addDishPreparationStepsGroupsHeader = "Preparation steps";
   static const String addDishStepsGroupNameLabel = "Steps group name";
+  static const String addDishStepLabel = "Step name";
 }

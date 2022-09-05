@@ -4,6 +4,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:cooking_app_flutter/domain/presentation/widget/platform_aware_image.dart';
 import 'package:cooking_app_flutter/domain/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
+import 'package:cooking_app_flutter/domain/util/unit.dart';
 import 'package:cooking_app_flutter/features/add_dish/presentation/add_dish_vm.dart';
 import 'package:flutter/material.dart';
 
@@ -170,7 +171,6 @@ class _AddDishScreenState extends State<AddDishScreen> {
                   IconButton(onPressed: _viewModel.onAddIngredientClicked, icon: const Icon(Icons.add))
                 ],
               ),
-              //TODO: del after
               const SizedBox(height: 20),
               const SizedBox(
                   width: double.infinity,
@@ -188,15 +188,45 @@ class _AddDishScreenState extends State<AddDishScreen> {
                     physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
                     children: preparationStepsGroups.entries.map((entry) {
-                      final name = entry.key;
+                      final groupName = entry.key;
                       final steps = entry.value;
-                      return ListTile(
-                        key: ValueKey(name),
-                        title: Text(name),
-                        trailing: IconButton(
-                            onPressed: () { _viewModel.onRemovePreparationStepsGroupClicked(name); },
-                            icon: const Icon(Icons.remove),
-                        ),
+                      return Column(
+                        children: [
+                          StreamBuilder<Unit>(
+                            stream: _viewModel.stepsChanged,
+                            builder: (context, snapshot) {
+                              return ReorderableListView(
+                                  physics: const ClampingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  header: Text(groupName),
+                                  onReorder: (oldIdx, newIdx) {
+                                    _viewModel.onPreparationStepsReordered(groupName, oldIdx, newIdx);
+                                  },
+                                  children: [
+                                    for(final step in steps)
+                                      ListTile(
+                                        key: ValueKey(step.hashCode),
+                                        title: Text(step),
+                                        trailing: IconButton(onPressed: () { _viewModel.onPreparationStepRemoved(groupName, step); }, icon: const Icon(Icons.remove)),
+                                      )
+                                  ],
+                              );
+                            },
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  // controller: _stepsGroupNameController,
+                                  onChanged: _viewModel.onNewPreparationStepNameChanged,
+                                  decoration: const InputDecoration(labelText: AppStrings.addDishStepLabel),
+                                ),
+                              ),
+                              IconButton(onPressed: () { _viewModel.onPreparationStepAdded(groupName); }, icon: const Icon(Icons.add))
+                            ],
+                          ),
+                          const SizedBox(height: 20,)
+                        ],
                       );
                     }).toList(),
                   );
@@ -215,7 +245,6 @@ class _AddDishScreenState extends State<AddDishScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              //TODO: del after
               StreamBuilder<List<String>>(
                 stream: _viewModel.photosPathsStream,
                 builder: (context, snapshot) {

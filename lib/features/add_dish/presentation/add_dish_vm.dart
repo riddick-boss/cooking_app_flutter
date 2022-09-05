@@ -112,22 +112,70 @@ class AddDishViewModel {
     _preparationStepsGroups.add(newMap);
   }
 
+  final _stepsChanged = PublishSubject<Unit>();
+  Stream<Unit> get stepsChanged => _stepsChanged.stream;
+
+  final _newPreparationStep = BehaviorSubject<String>.seeded("");
+  Stream<String> get newPreparationStep => _newPreparationStep.stream; // TODO: needed?
+
+  void onNewPreparationStepNameChanged(String value) {
+    _newPreparationStep.add(value);
+  }
+
+  void onPreparationStepAdded(String groupName) {
+    final step = _newPreparationStep.value;
+    final steps = _preparationStepsGroups.value[groupName];
+    if(steps == null) return;
+    final newSteps = List<String>.from(steps)..add(step);
+    final groups = Map<String, List<String>>.from(_preparationStepsGroups.value)..[groupName] = newSteps;
+    _preparationStepsGroups.add(groups);
+    _stepsChanged.add(Unit());
+  }
+
+  void onPreparationStepsReordered(String groupName, int oldIdx, int newIdx) {
+    final steps = _preparationStepsGroups.value[groupName];
+    if(steps == null || steps.isEmpty) return;
+    final newSteps = List<String>.from(steps)..reorder(oldIdx, newIdx);
+    final groups = Map<String, List<String>>.from(_preparationStepsGroups.value)..[groupName] = newSteps;
+    _preparationStepsGroups.add(groups);
+    _stepsChanged.add(Unit());
+  }
+
+  void onPreparationStepRemoved(String groupName, String step) {
+    final steps = _preparationStepsGroups.value[groupName];
+    if(steps == null) return;
+    final newSteps = List<String>.from(steps)..remove(step);
+    final groups = Map<String, List<String>>.from(_preparationStepsGroups.value)..[groupName] = newSteps;
+    _preparationStepsGroups.add(groups);
+    _stepsChanged.add(Unit());
+  }
+
+  List<PreparationStepsGroup> _createPreparationStepsGroups() {
+    final groups = List<PreparationStepsGroup>.empty(growable: true);
+    var sortOrder = 0;
+    _preparationStepsGroups.value.forEach((groupName, stepsNames) {
+      final steps = _createPreparationSteps(stepsNames);
+      final group = PreparationStepsGroup(name: groupName, sortOrder: sortOrder, steps: steps);
+      groups.add(group);
+      sortOrder++;
+    });
+    return groups;
+  }
+
+  List<PreparationStep> _createPreparationSteps(List<String> stepsNames) =>
+      stepsNames.mapIndexed((index, name) => PreparationStep(name: name, sortOrder: index)).toList();
+
   Future<void> onCreateDishClicked({
     required String dishName,
     required int preparationTimeInMinutes,
     required String category,
   }) async {
-    final prepSteps1 = [PreparationStep(name: "step2", sortOrder: 2), PreparationStep(name: "step1", sortOrder: 1)]; //TODO: del
-    final prepSteps2 = [PreparationStep(name: "1step", sortOrder: 1), PreparationStep(name: "2step", sortOrder: 2)]; //TODO: del
-    final group1 = PreparationStepsGroup(name: "group1", sortOrder: 1, steps: prepSteps1); //TODO: del
-    final group2 = PreparationStepsGroup(name: "group2", sortOrder: 2, steps: prepSteps2); //TODO: del
-    final groups = [group2, group1]; //TODO: del
     final dish = Dish(
       category: category,
       preparationTimeInMinutes: preparationTimeInMinutes,
       dishName: dishName,
       ingredients: _ingredients.value,
-      preparationStepsGroups: groups, //TODO: from user
+      preparationStepsGroups: _createPreparationStepsGroups(),
       photos: _createDishPhotosList(_photosPaths.value),
     );
     try {
