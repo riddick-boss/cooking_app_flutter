@@ -56,4 +56,5 @@ class AppStrings {
   static const String addDishPreparationStepsGroupsHeader = "Preparation steps";
   static const String addDishStepsGroupNameLabel = "Steps group name";
   static const String addDishStepLabel = "Step name";
+  static String addDishPreparationTime(int time) => 'Preparation time: $time';
 }

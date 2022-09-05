@@ -10,6 +10,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_step.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_steps_group.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/permissions/permissions_manager.dart';
+import 'package:cooking_app_flutter/domain/util/cast.dart';
 import 'package:cooking_app_flutter/domain/util/extension/behavior_subject_list_extension.dart';
 import 'package:cooking_app_flutter/domain/util/extension/list_extension.dart';
 import 'package:cooking_app_flutter/domain/util/unit.dart';
@@ -26,6 +27,15 @@ class AddDishViewModel {
 
   final _showSnackBarSubject = PublishSubject<String>();
   Stream<String> get showSnackBarStream => _showSnackBarSubject.stream;
+
+  final _preparationTime = BehaviorSubject<int>.seeded(0);
+  Stream<int> get preparationTime => _preparationTime.stream;
+
+  void onPreparationTimeChanged(dynamic value) {
+    final time = cast<int>(value);
+    if(time == null || time < 0) return;
+    _preparationTime.add(time);
+  }
 
   final _photosPaths = BehaviorSubject<List<String>>.seeded(List.empty());
   Stream<List<String>> get photosPathsStream => _photosPaths.stream;
@@ -167,12 +177,11 @@ class AddDishViewModel {
 
   Future<void> onCreateDishClicked({
     required String dishName,
-    required int preparationTimeInMinutes,
     required String category,
   }) async {
     final dish = Dish(
       category: category,
-      preparationTimeInMinutes: preparationTimeInMinutes,
+      preparationTimeInMinutes: _preparationTime.value,
       dishName: dishName,
       ingredients: _ingredients.value,
       preparationStepsGroups: _createPreparationStepsGroups(),

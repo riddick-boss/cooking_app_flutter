@@ -1,3 +1,4 @@
+import 'package:bottom_picker/bottom_picker.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/ingredient.dart';
@@ -19,7 +20,6 @@ class _AddDishScreenState extends State<AddDishScreen> {
   final _formKey = GlobalKey<FormState>();
   final _dishNameController = TextEditingController();
   final _categoryController = TextEditingController();
-  final _preparationTimeController = TextEditingController();
   final _ingredientNameController = TextEditingController();
   final _ingredientQuantityController = TextEditingController();
   final _stepsGroupNameController = TextEditingController();
@@ -27,6 +27,8 @@ class _AddDishScreenState extends State<AddDishScreen> {
   final _viewModel = getIt<AddDishViewModel>();
 
   int _currentPhotoIndex = 0;
+
+  final _preparationTimeRange = List<Text>.generate(500, (i) => Text("$i"));
 
   @override
   void initState() {
@@ -49,10 +51,8 @@ class _AddDishScreenState extends State<AddDishScreen> {
   Future<void> onCreateDishClicked() async {
     final dishName = _dishNameController.text.trim();
     final category = _categoryController.text.trim();
-    final preparationTime = int.parse(_preparationTimeController.text);
     await _viewModel.onCreateDishClicked(
       dishName: dishName,
-      preparationTimeInMinutes: preparationTime,
       category: category,
     );
   }
@@ -61,7 +61,6 @@ class _AddDishScreenState extends State<AddDishScreen> {
   void dispose() {
     _dishNameController.dispose();
     _categoryController.dispose();
-    _preparationTimeController.dispose();
     _ingredientNameController.dispose();
     _ingredientQuantityController.dispose();
     _stepsGroupNameController.dispose();
@@ -106,22 +105,33 @@ class _AddDishScreenState extends State<AddDishScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      // TODO: use picker
-                      controller: _preparationTimeController,
-                      validator: (time) => int.parse(time!) > 0
-                          ? null
-                          : AppStrings.addDishPreparationTimeError,
-                      decoration: InputDecoration(
-                        hintText: AppStrings.addDishPreparationTimeHint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
+              ),
+              const SizedBox(height: 20),
+              StreamBuilder<int>(
+                  stream: _viewModel.preparationTime,
+                  builder: (context, snapshot) {
+                    final time = snapshot.data ?? 0;
+                    return GestureDetector(
+                      onTap: () {
+                        BottomPicker(
+                          title: AppStrings.addDishPreparationTimeHint,
+                          titleStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize:  15),
+                          items: _preparationTimeRange,
+                          dismissable: true,
+                          selectedItemIndex: time,
+                          onSubmit: _viewModel.onPreparationTimeChanged,
+                        ).show(context);
+                      },
+                      child: Row(
+                        children: [
+                          Expanded(child: Text(AppStrings.addDishPreparationTime(time))),
+                          const Icon(Icons.edit),
+                        ],
+                      ),
+                    );
+                  },
               ),
               const SizedBox(height: 20),
               StreamBuilder<List<Ingredient>>(

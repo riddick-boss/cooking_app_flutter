@@ -46,6 +46,8 @@ dependencies:
   rxdart: ^0.27.5
 #  Collections utilities
   collection: ^1.16.0
+# Bottom number picker:
+  bottom_picker: ^1.9.1
 
 dev_dependencies:
   flutter_test:
