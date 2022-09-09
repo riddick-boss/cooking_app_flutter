@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 
 @module
 abstract class PermissionsManagerModule {
-
   @lazySingleton
   PermissionsManager getPermissionsManager() => PermissionsManagerImpl();
 }

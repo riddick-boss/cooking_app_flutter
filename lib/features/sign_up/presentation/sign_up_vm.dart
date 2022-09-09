@@ -10,6 +10,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
+// TODO: use rxDart
+
 @injectable
 class SignUpViewModel {
   final _authManager = getIt<AuthManager>();

@@ -1,4 +1,4 @@
-import 'package:cooking_app_flutter/core/infrastructure/auth/mapper/user_extension.dart';
+import 'package:cooking_app_flutter/core/infrastructure/auth/mapper/user_mapper.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_manager.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/auth/model/auth_user.dart';

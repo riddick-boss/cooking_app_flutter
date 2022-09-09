@@ -16,7 +16,7 @@ class AddDishScreen extends StatefulWidget {
   State createState() => _AddDishScreenState();
 }
 
-class _AddDishScreenState extends State<AddDishScreen> {
+class _AddDishScreenState extends State<AddDishScreen> { // TODO: separate screen to smaller widgets
   final _dishNameController = TextEditingController();
   final _categoryController = TextEditingController();
   final _ingredientNameController = TextEditingController();

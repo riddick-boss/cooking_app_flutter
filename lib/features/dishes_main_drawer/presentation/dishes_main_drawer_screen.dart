@@ -61,7 +61,7 @@ class MainDrawer extends StatelessWidget {
   final DishesMainDrawerViewModel viewModel;
 
   @override
-  Widget build(BuildContext context) => Drawer(
+  Widget build(BuildContext context) => Drawer( // TODO: use floating drawer (or similar)
     child: Material(
       color: Colors.blueAccent, // TODO: color
       child: Column(
