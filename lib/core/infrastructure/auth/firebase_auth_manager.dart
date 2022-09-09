@@ -1,12 +1,14 @@
-import 'package:cooking_app_flutter/core/domain/auth/manager/auth_manager.dart';
-import 'package:cooking_app_flutter/core/domain/auth/model/auth_user.dart';
-import 'package:cooking_app_flutter/core/infrastructure/auth/mapper/user_extension.dart';
+import 'package:cooking_app_flutter/core/infrastructure/auth/mapper/user_mapper.dart';
+import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_manager.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/auth/model/auth_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:injectable/injectable.dart';
 
+@lazySingleton
+@injectable
 class FirebaseAuthManager implements AuthManager {
-  FirebaseAuthManager(this._firebaseAuth);
-
-  final FirebaseAuth _firebaseAuth;
+  final _firebaseAuth = getIt<FirebaseAuth>();
 
   @override
   Stream<AuthUser?> get authState => _firebaseAuth.authStateChanges().map((user) => user?.toAuthUser());

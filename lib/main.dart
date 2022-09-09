@@ -1,8 +1,9 @@
-import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
-import 'package:cooking_app_flutter/core/assets/theme/colors.dart';
-import 'package:cooking_app_flutter/core/domain/auth/manager/auth_manager.dart';
-import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
+import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_manager.dart';
+import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
+import 'package:cooking_app_flutter/domain/presentation/theme/colors.dart';
+import 'package:cooking_app_flutter/features/add_dish/presentation/add_dish_screen.dart';
 import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/dishes_main_drawer_screen.dart';
 import 'package:cooking_app_flutter/features/login/presentation/login_screen.dart';
 import 'package:cooking_app_flutter/features/sign_up/presentation/sign_up_screen.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
           MainAppNav.loginRoute: (context) => const LoginScreen(), // TODO: move to MainAppNav ?
           MainAppNav.signUpRoute: (context) => const SignUpScreen(),
           MainAppNav.dishesMainDrawerRoute: (context) => const DishesMainDrawerScreen(),
+          MainAppNav.addDishRoute: (context) => const AddDishScreen(),
         },
       );
 }

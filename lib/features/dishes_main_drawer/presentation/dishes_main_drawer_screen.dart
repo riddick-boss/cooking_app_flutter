@@ -1,6 +1,6 @@
-import 'package:cooking_app_flutter/core/assets/string/app_strings.dart';
-import 'package:cooking_app_flutter/core/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
+import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/dishes_main_drawer_vm.dart';
 import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/screens.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,6 @@ class DishesMainDrawerScreen extends StatefulWidget {
 }
 
 class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
-
   final _viewModel = getIt<DishesMainDrawerViewModel>();
 
   late DishesMainDrawerScreens _screen = DishesMainDrawerScreens.myDishes;
@@ -33,7 +32,6 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
     });
   }
 
-
   @override
   void dispose() {
     _viewModel.dispose();
@@ -49,6 +47,7 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
       onItemClick: onDrawerItemClick, viewModel: _viewModel,
     ),
     body: _screen.body,
+    floatingActionButton: const DishesDrawerFAB(),
   );
 }
 
@@ -62,7 +61,7 @@ class MainDrawer extends StatelessWidget {
   final DishesMainDrawerViewModel viewModel;
 
   @override
-  Widget build(BuildContext context) => Drawer(
+  Widget build(BuildContext context) => Drawer( // TODO: use floating drawer (or similar)
     child: Material(
       color: Colors.blueAccent, // TODO: color
       child: Column(
@@ -119,4 +118,17 @@ class LogoutListTile extends StatelessWidget {
         hoverColor: Colors.white70,
         onTap: signOut,
       );
+}
+
+class DishesDrawerFAB extends StatelessWidget {
+  const DishesDrawerFAB({super.key});
+
+  @override
+  Widget build(BuildContext context) => FloatingActionButton(
+    onPressed: () {
+      MainAppNav.navigator.currentState?.pushNamed(MainAppNav.addDishRoute);
+    },
+    backgroundColor: Colors.indigoAccent,
+    child: const Icon(Icons.add),
+  );
 }

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="abandonedstudio.flutter.cooking_app_flutter">
    <application
-        android:label="cooking_app_flutter"
+        android:label="Cooking App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
