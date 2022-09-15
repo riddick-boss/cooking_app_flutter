@@ -70,6 +70,7 @@ class _AddDishScreenState extends State<AddDishScreen> { // TODO: separate scree
           title: const Text(AppStrings.addDishTitle),
         ),
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [

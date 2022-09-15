@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
+import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_dish.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_dish_photo.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_ingredient.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_preparation_step.dart';
@@ -19,42 +21,74 @@ class FirestoreManager implements RemoteDatabaseManager {
   final _authManager = getIt<AuthManager>();
 
   String get _userId => _authManager.currentUser!.uid;
-  CollectionReference get _usersReference => _fireStore.collection(FirestoreConstants.usersCollection);
+  CollectionReference<Map<String, dynamic>> get _usersCollection => _fireStore.collection(FirestoreConstants.usersCollection);
   DocumentReference<Map<String, dynamic>> get _userDoc => _fireStore.collection(FirestoreConstants.usersCollection).doc(_userId);
+  CollectionReference<Map<String, dynamic>> get _userDishesCollection => _userDoc.collection(FirestoreConstants.userAllDishesCollection);
   Reference get _storageRef => FirebaseStorage.instance.ref();
   Reference get _userDishPhotosPhotosRef => _storageRef.child(FirestoreConstants.usersCollection).child(_userId).child(FirestoreConstants.photosCollection);
 
   @override
-  Future<void> initUserCollection({required String userUid, required String firstName, required String lastName}) async {
+  Future<void> initUserCollection({required String userUid, required String firstName, required String lastName}) async { // TODO: check if user collection already exists
     if(userUid != _userId) throw ArgumentError("User ids do not match!");
-    await _usersReference.doc(userUid).set({
+    await _usersCollection.doc(userUid).set({
       FirestoreConstants.userFirstNameField: firstName,
       FirestoreConstants.userLastNameField: lastName,
     });
   }
 
   @override
-  Future<void> getAllDishes() {
+  Future<List<Dish>> getAllDishes() async { // TODO: catch exceptions
     // TODO: implement getAllDishes
-    throw UnimplementedError();
+    final snapshot = await _userDishesCollection.get();
+    final response = snapshot.docs;
+    // TODO: map to list of dishes
+    return response.map((documentSnapshot) {
+      final dishData = documentSnapshot.data();
+      debugPrint("response");
+      debugPrint("$dishData");
+      return FirestoreDish.fromFirestore(
+        documentSnapshot,
+        List.empty(), // TODO
+        List.empty(), // TODO
+        List.empty(), // TODO
+      ).toDish();
+    }).toList(growable: false).sorted();
+  }
+
+  @override
+  Stream<List<Dish>> get allUserDishes { // TODO: catch exceptions
+    final response = _userDishesCollection.snapshots();
+    debugPrint("${response.first}");
+    return response.map((event) {
+      debugPrint("allUserDishes event");
+      debugPrint("${event.docs}");
+      return event.docs.map((e) {
+        debugPrint("${e.data()}");
+        return Dish(
+          dishName: "dishName", // TODO
+          preparationTimeInMinutes: 0, // TODO
+          category: "category", // TODO
+          ingredients: List.empty(), //TODO
+          preparationStepsGroups: List.empty(), //TODO
+          photos: List.empty(), // TODO
+        );
+      }
+      ).toList(growable: false).sorted();
+    }
+    );
   }
 
   @override
   Future<void> createDish(Dish dish) async {
     final fireStoreDish = dish.toFirestoreDish();
-    final dishData = fireStoreDish.toFirestore();
-    final ingredients = fireStoreDish.ingredients;
-    final preparationStepsGroups = fireStoreDish.preparationStepsGroups;
-    final photos = fireStoreDish.photos;
-    final allDishesCollection = _userDoc.collection(FirestoreConstants.userAllDishesCollection);
 
-    final dishDoc = await allDishesCollection.add(dishData); // TODO: save public or not
+    final dishDoc = await _userDishesCollection.add(fireStoreDish.toFirestore()); // TODO: save public or not
 
     debugPrint("Created dish with ID: ${dishDoc.id}");
 
-    await _createIngredients(dishDoc, ingredients);
-    await _createPreparationStepsAndGroups(dishDoc, preparationStepsGroups);
-    await _savePhotos(dishDoc, photos);
+    await _createIngredients(dishDoc, fireStoreDish.ingredients);
+    await _createPreparationStepsAndGroups(dishDoc, fireStoreDish.preparationStepsGroups);
+    await _savePhotos(dishDoc, fireStoreDish.photos);
   }
 
   Future<void> _createIngredients(DocumentReference<Map<String, dynamic>> dishDoc, List<FirestoreIngredient> ingredients) async {

@@ -7,7 +7,9 @@ abstract class RemoteDatabaseManager {
     required String lastName,
   });
 
-  Future<void> getAllDishes(); // TODO
+  Future<List<Dish>> getAllDishes();
+
+  Stream<List<Dish>> get allUserDishes;
 
   Future<void> createDish(Dish dish);
 }

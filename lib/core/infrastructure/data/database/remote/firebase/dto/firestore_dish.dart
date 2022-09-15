@@ -17,7 +17,6 @@ class FirestoreDish {
 
   factory FirestoreDish.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
-    // SnapshotOptions? options,
     List<FirestoreIngredient> ingredients,
     List<FireStorePreparationStepsGroup> preparationStepsGroups,
     List<FireStoreDishPhoto> photos,
@@ -31,7 +30,7 @@ class FirestoreDish {
       ingredients: ingredients,
       preparationStepsGroups: preparationStepsGroups,
       photos: photos,
-      dishId: data[_FirestoreDishFields.dishId] as String,
+      dishId: snapshot.id,
     );
   }
 
@@ -54,5 +53,4 @@ class _FirestoreDishFields {
   static const dishName = 'dish_name';
   static const preparationTimeInMinutes = 'preparation_time_in_minutes';
   static const category = 'category';
-  static const dishId = 'dish_id';
 }

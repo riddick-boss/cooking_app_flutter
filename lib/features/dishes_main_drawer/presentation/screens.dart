@@ -1,5 +1,5 @@
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cooking_app_flutter/features/dishes/presentation/dishes_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 enum DishesMainDrawerScreens { myDishes, public }
@@ -20,7 +20,7 @@ extension Body on DishesMainDrawerScreens {
     // todo: widgets
     switch (this) {
       case DishesMainDrawerScreens.myDishes:
-        return Text(FirebaseAuth.instance.currentUser!.email!);
+        return const DishesScreen();
       case DishesMainDrawerScreens.public:
         return Text(title);
     }
