@@ -71,6 +71,17 @@ class _DishesScreenState extends State<DishesScreen> {
                             ),
                           ),
                         ),
+                        for(final group in dish.preparationStepsGroups)
+                          Center(
+                            child: Text(
+                              "group: ${group.name}: ${group.steps.length}",
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
                         Center(
                           child: Text(
                             "photos: ${dish.photos.length}",

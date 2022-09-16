@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_preparation_step.dart';
 
 class FireStorePreparationStepsGroup extends Comparable<FireStorePreparationStepsGroup> {
@@ -8,7 +9,19 @@ class FireStorePreparationStepsGroup extends Comparable<FireStorePreparationStep
     this.id,
   });
 
-  //TODO: factory fromFirestore
+  factory FireStorePreparationStepsGroup.fromFirestore({
+    required DocumentSnapshot<Map<String, dynamic>> snapshot,
+    required List<FireStorePreparationStep> steps,
+  }) {
+    final data = snapshot.data();
+    if(data == null) throw ArgumentError("Data from firebase is null!");
+    return FireStorePreparationStepsGroup(
+        name: data[_FireStorePreparationStepsGroupFields.name] as String,
+        sortOrder: data[_FireStorePreparationStepsGroupFields.sortOrder] as int,
+        steps: steps,
+        id: snapshot.id,
+    );
+  }
 
   Map<String, dynamic> toFireStore() => {
     _FireStorePreparationStepsGroupFields.name: name,
@@ -27,5 +40,4 @@ class FireStorePreparationStepsGroup extends Comparable<FireStorePreparationStep
 class _FireStorePreparationStepsGroupFields {
   static const name = 'name';
   static const sortOrder = 'sortOrder';
-  static const id = 'id';
 }

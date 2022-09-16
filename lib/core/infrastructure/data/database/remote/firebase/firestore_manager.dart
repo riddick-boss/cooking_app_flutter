@@ -39,23 +39,16 @@ class FirestoreManager implements RemoteDatabaseManager {
 
   @override
   Future<UnmodifiableListView<Dish>> getAllDishes() async { // TODO: catch exceptions
-    // TODO: implement getAllDishes
     final snapshot = await _userDishesCollection.get();
     final response = snapshot.docs;
-    // TODO: map to list of dishes
     final list = List<Dish>.empty(growable: true);
     for(final documentSnapshot in response) {
-      final dishData = documentSnapshot.data();
-      debugPrint("response");
-      debugPrint("$dishData");
-      final photos = await _getDishPhotos(documentSnapshot.id);
-      final ingredients = await _getIngredients(documentSnapshot.id);
       list.add(
           FirestoreDish.fromFirestore(
             snapshot: documentSnapshot,
-            ingredients: ingredients,
-            preparationStepsGroups: List.empty(), // TODO
-            photos: photos,
+            ingredients: await _getIngredients(documentSnapshot.id),
+            preparationStepsGroups: await _getPreparationStepsGroups(documentSnapshot.id),
+            photos: await _getDishPhotos(documentSnapshot.id),
           ).toDish(),
       );
     }
@@ -72,6 +65,25 @@ class FirestoreManager implements RemoteDatabaseManager {
     final snapshot = await _userDishesCollection.doc(dishId).collection(FirestoreConstants.ingredientsCollection).get();
     final response = snapshot.docs;
     return response.map(FirestoreIngredient.fromFirestore).toList(growable: false);
+  }
+
+  Future<List<FireStorePreparationStep>> _getPreparationSteps(String dishId, String stepsGroupId) async { // TODO: catch exception
+    final snapshot = await _userDishesCollection.doc(dishId).collection(FirestoreConstants.preparationStepsGroupsCollection).doc(stepsGroupId).collection(FirestoreConstants.preparationStepsCollection).get();
+    final response = snapshot.docs;
+    return response.map(FireStorePreparationStep.fromFirestore).toList(growable: false).sorted();
+  }
+
+  Future<List<FireStorePreparationStepsGroup>> _getPreparationStepsGroups(String dishId) async { // TODO: catch exception
+    final snapshot = await _userDishesCollection.doc(dishId).collection(FirestoreConstants.preparationStepsGroupsCollection).get();
+    final response = snapshot.docs;
+    final list = List<FireStorePreparationStepsGroup>.empty(growable: true);
+
+    for(final documentSnapshot in response) {
+      final steps = await _getPreparationSteps(dishId, documentSnapshot.id);
+      list.add(FireStorePreparationStepsGroup.fromFirestore(snapshot: documentSnapshot, steps: steps));
+    }
+
+    return list.sorted();
   }
 
   @override

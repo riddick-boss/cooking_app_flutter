@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class FireStorePreparationStep extends Comparable<FireStorePreparationStep>{
   FireStorePreparationStep({
     required this.name,
@@ -5,7 +7,17 @@ class FireStorePreparationStep extends Comparable<FireStorePreparationStep>{
     this.id,
   });
 
-  //TODO: factory fromFirestore
+  factory FireStorePreparationStep.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot,
+  ) {
+    final data = snapshot.data();
+    if(data == null) throw ArgumentError("Data from firebase is null!");
+    return FireStorePreparationStep(
+      name: data[_FirestorePreparationStepFields.name] as String,
+      sortOrder: data[_FirestorePreparationStepFields.sortOrder] as int,
+      id: snapshot.id,
+    );
+  }
 
   Map<String, dynamic> toFirestore() => {
         _FirestorePreparationStepFields.name: name,
@@ -23,5 +35,4 @@ class FireStorePreparationStep extends Comparable<FireStorePreparationStep>{
 class _FirestorePreparationStepFields {
   static const name = 'name';
   static const sortOrder = 'sortOrder';
-  static const id = 'id';
 }
