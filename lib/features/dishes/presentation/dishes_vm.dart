@@ -15,6 +15,7 @@ class DishesViewModel { // TODO: add remote source
 
   Future<void> getDishes() async {
     final dishes = await _dbManager.getAllDishes();
+    // dishes.add(Dish(dishName: "dishName", preparationTimeInMinutes: 1, category: "category", ingredients: List.empty(), preparationStepsGroups: List.empty(), photos: List.empty(), dishId: "id"));
     _dishesSubject.add(dishes);
   }
 

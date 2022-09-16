@@ -27,6 +27,7 @@ class FirestoreManager implements RemoteDatabaseManager {
   Reference get _storageRef => FirebaseStorage.instance.ref();
   Reference get _userDishPhotosPhotosRef => _storageRef.child(FirestoreConstants.usersCollection).child(_userId).child(FirestoreConstants.photosCollection);
 
+  // this should be done by backend, but in this project I wanted to focus on Flutter
   @override
   Future<void> initUserCollection({required String userUid, required String firstName, required String lastName}) async { // TODO: check if user collection already exists
     if(userUid != _userId) throw ArgumentError("User ids do not match!");
@@ -42,17 +43,28 @@ class FirestoreManager implements RemoteDatabaseManager {
     final snapshot = await _userDishesCollection.get();
     final response = snapshot.docs;
     // TODO: map to list of dishes
-    return response.map((documentSnapshot) {
+    final list = List<Dish>.empty(growable: true);
+    for(final documentSnapshot in response) {
       final dishData = documentSnapshot.data();
       debugPrint("response");
       debugPrint("$dishData");
-      return FirestoreDish.fromFirestore(
-        documentSnapshot,
-        List.empty(), // TODO
-        List.empty(), // TODO
-        List.empty(), // TODO
-      ).toDish();
-    }).toList(growable: false).sorted();
+      final photos = await _getDishPhotos(documentSnapshot.id);
+      list.add(
+          FirestoreDish.fromFirestore(
+            snapshot: documentSnapshot,
+            ingredients: List.empty(), // TODO
+            preparationStepsGroups: List.empty(), // TODO
+            photos: photos,
+          ).toDish(),
+      );
+    }
+    return list.sorted();
+  }
+
+  Future<List<FireStoreDishPhoto>> _getDishPhotos(String dishId) async { // TODO: catch exception
+    final snapshot = await _userDishesCollection.doc(dishId).collection(FirestoreConstants.photosCollection).get();
+    final response = snapshot.docs;
+    return response.map(FireStoreDishPhoto.fromFirestore).toList(growable: false).sorted();
   }
 
   @override
