@@ -27,6 +27,13 @@ class _DishesScreenState extends State<DishesScreen> {
         stream: _viewModel.dishesStream,
         builder: (context, snapshot) {
           final dishes = snapshot.data ?? List.empty();
+
+          if(dishes.isEmpty) { // TODO: in case of exception
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
           return ListWheelScrollView(
               physics: const BouncingScrollPhysics(),
               itemExtent: 120,
