@@ -49,10 +49,11 @@ class FirestoreManager implements RemoteDatabaseManager {
       debugPrint("response");
       debugPrint("$dishData");
       final photos = await _getDishPhotos(documentSnapshot.id);
+      final ingredients = await _getIngredients(documentSnapshot.id);
       list.add(
           FirestoreDish.fromFirestore(
             snapshot: documentSnapshot,
-            ingredients: List.empty(), // TODO
+            ingredients: ingredients,
             preparationStepsGroups: List.empty(), // TODO
             photos: photos,
           ).toDish(),
@@ -65,6 +66,12 @@ class FirestoreManager implements RemoteDatabaseManager {
     final snapshot = await _userDishesCollection.doc(dishId).collection(FirestoreConstants.photosCollection).get();
     final response = snapshot.docs;
     return response.map(FireStoreDishPhoto.fromFirestore).toList(growable: false).sorted();
+  }
+
+  Future<List<FirestoreIngredient>> _getIngredients(String dishId) async { // TODO: catch exception
+    final snapshot = await _userDishesCollection.doc(dishId).collection(FirestoreConstants.ingredientsCollection).get();
+    final response = snapshot.docs;
+    return response.map(FirestoreIngredient.fromFirestore).toList(growable: false);
   }
 
   @override
