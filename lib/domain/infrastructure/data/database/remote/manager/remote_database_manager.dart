@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish.dart';
 
 abstract class RemoteDatabaseManager {
@@ -7,9 +9,9 @@ abstract class RemoteDatabaseManager {
     required String lastName,
   });
 
-  Future<List<Dish>> getAllDishes();
+  Future<UnmodifiableListView<Dish>> getAllDishes();
 
-  Stream<List<Dish>> get allUserDishes;
+  Stream<UnmodifiableListView<Dish>> get allUserDishes;
 
   Future<void> createDish(Dish dish);
 }

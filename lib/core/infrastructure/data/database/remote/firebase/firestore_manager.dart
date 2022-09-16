@@ -38,7 +38,7 @@ class FirestoreManager implements RemoteDatabaseManager {
   }
 
   @override
-  Future<List<Dish>> getAllDishes() async { // TODO: catch exceptions
+  Future<UnmodifiableListView<Dish>> getAllDishes() async { // TODO: catch exceptions
     // TODO: implement getAllDishes
     final snapshot = await _userDishesCollection.get();
     final response = snapshot.docs;
@@ -58,7 +58,7 @@ class FirestoreManager implements RemoteDatabaseManager {
           ).toDish(),
       );
     }
-    return list.sorted();
+    return UnmodifiableListView(list.sorted());
   }
 
   Future<List<FireStoreDishPhoto>> _getDishPhotos(String dishId) async { // TODO: catch exception
@@ -68,13 +68,13 @@ class FirestoreManager implements RemoteDatabaseManager {
   }
 
   @override
-  Stream<List<Dish>> get allUserDishes { // TODO: catch exceptions
+  Stream<UnmodifiableListView<Dish>> get allUserDishes { // TODO: catch exceptions
     final response = _userDishesCollection.snapshots();
     debugPrint("${response.first}");
     return response.map((event) {
       debugPrint("allUserDishes event");
       debugPrint("${event.docs}");
-      return event.docs.map((e) {
+      final list = event.docs.map((e) {
         debugPrint("${e.data()}");
         return Dish(
           dishName: "dishName", // TODO
@@ -84,10 +84,9 @@ class FirestoreManager implements RemoteDatabaseManager {
           preparationStepsGroups: List.empty(), //TODO
           photos: List.empty(), // TODO
         );
-      }
-      ).toList(growable: false).sorted();
-    }
-    );
+      }).toList(growable: false).sorted();
+      return UnmodifiableListView(list);
+    });
   }
 
   @override
