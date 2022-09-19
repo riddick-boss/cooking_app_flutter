@@ -37,7 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void onAlreadyRegisteredClicked() {
-    MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNav.loginRoute);
+    MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNavDestinations.login.route);
   }
 
   @override
@@ -49,7 +49,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
 
     _viewModel.onNavigateToDishesScreenStream.listen((event) {
-      MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNav.dishesMainDrawerRoute, (route) => false); // clear stack and go to dishes screen
+      MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNavDestinations.dishesMainDrawer.route, (route) => false); // clear stack and go to dishes screen
     });
   }
 
