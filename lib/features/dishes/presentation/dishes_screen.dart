@@ -3,6 +3,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish_photo.dart';
 import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/domain/presentation/widget/platform_aware_image.dart';
+import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
 import 'package:cooking_app_flutter/features/dishes/presentation/dishes_vm.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,10 @@ class _DishesScreenState extends State<DishesScreen> {
   void initState() {
     super.initState();
     _viewModel.getDishes();
+
+    _viewModel.showSnackBarStream.listen((message) {
+      showSnackBar(context, message);
+    });
   }
 
   @override

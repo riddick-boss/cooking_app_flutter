@@ -57,4 +57,7 @@ class AppStrings {
   static const String addDishStepsGroupNameLabel = "Steps group name";
   static const String addDishStepLabel = "Step name";
   static String addDishPreparationTime(int time) => 'Preparation time: $time';
+
+  // dishes list
+  static const String dishesListLoadingError = "Failed to load dishes!";
 }

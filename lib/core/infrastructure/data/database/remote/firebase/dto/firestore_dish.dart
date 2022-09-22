@@ -18,8 +18,8 @@ class FirestoreDish {
   factory FirestoreDish.fromFirestore({
     required DocumentSnapshot<Map<String, dynamic>> snapshot,
     required List<FirestoreIngredient> ingredients,
-    required List<FireStorePreparationStepsGroup> preparationStepsGroups,
-    required List<FireStoreDishPhoto> photos,
+    required List<FirestorePreparationStepsGroup> preparationStepsGroups,
+    required List<FirestoreDishPhoto> photos,
   }) {
     final data = snapshot.data();
     if(data == null) throw ArgumentError("Dish data from firebase is null!");
@@ -44,8 +44,8 @@ class FirestoreDish {
   final int preparationTimeInMinutes;
   final String category;
   final List<FirestoreIngredient> ingredients;
-  final List<FireStorePreparationStepsGroup> preparationStepsGroups;
-  final List<FireStoreDishPhoto> photos;
+  final List<FirestorePreparationStepsGroup> preparationStepsGroups;
+  final List<FirestoreDishPhoto> photos;
   final String? dishId;
 }
 

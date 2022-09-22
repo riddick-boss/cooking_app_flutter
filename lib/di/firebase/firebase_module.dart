@@ -9,7 +9,7 @@ abstract class FirebaseModule {
   FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
 
   @lazySingleton
-  FirebaseFirestore get fireStore => FirebaseFirestore.instance;
+  FirebaseFirestore get firestore => FirebaseFirestore.instance;
 
   @lazySingleton
   FirebaseStorage get firebaseStorage => FirebaseStorage.instance;

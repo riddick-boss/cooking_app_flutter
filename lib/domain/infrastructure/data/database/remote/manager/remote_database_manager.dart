@@ -10,8 +10,6 @@ abstract class RemoteDatabaseManager {
   });
 
   Future<UnmodifiableListView<Dish>> getAllDishes();
-
-  Stream<UnmodifiableListView<Dish>> get allUserDishes;
-
+  
   Future<void> createDish(Dish dish);
 }
