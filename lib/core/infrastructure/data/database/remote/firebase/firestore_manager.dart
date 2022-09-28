@@ -14,6 +14,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 
+@lazySingleton
 @injectable
 class FirestoreManager implements RemoteDatabaseManager {
   final _firestore = getIt<FirebaseFirestore>();
@@ -26,7 +27,6 @@ class FirestoreManager implements RemoteDatabaseManager {
   Reference get _storageRef => FirebaseStorage.instance.ref();
   Reference get _userDishPhotosPhotosRef => _storageRef.child(FirestoreConstants.usersCollection).child(_userId).child(FirestoreConstants.photosCollection);
 
-  // this should be done by backend, but in this project I wanted to focus on Flutter
   @override
   Future<void> initUserCollection({required String userUid, required String firstName, required String lastName}) async {
     if(userUid != _userId) throw ArgumentError("User ids do not match!");

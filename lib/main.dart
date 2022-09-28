@@ -12,8 +12,8 @@ Future<dynamic> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   configureInjection();
 
-  final _authManager = getIt<AuthManager>();
-  final initialRoute = _authManager.currentUser == null
+  final authManager = getIt<AuthManager>();
+  final initialRoute = authManager.currentUser == null
       ? MainAppNavDestinations.login.route
       : MainAppNavDestinations.dishesMainDrawer.route;
 
