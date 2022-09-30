@@ -22,5 +22,5 @@ class Dish extends Comparable<Dish>{
   final String? dishId;
 
   @override
-  int compareTo(Dish other) => dishName.compareTo(other.dishName); //TODO: is it fine?
+  int compareTo(Dish other) => dishName.compareTo(other.dishName);
 }
