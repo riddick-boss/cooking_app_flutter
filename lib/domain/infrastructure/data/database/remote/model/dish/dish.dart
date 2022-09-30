@@ -2,7 +2,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/ingredient.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/preparation_steps_group.dart';
 
-class Dish {
+class Dish extends Comparable<Dish>{
   Dish({
     required this.dishName,
     required this.preparationTimeInMinutes,
@@ -20,4 +20,7 @@ class Dish {
   final List<PreparationStepsGroup> preparationStepsGroups;
   final List<DishPhoto> photos;
   final String? dishId;
+
+  @override
+  int compareTo(Dish other) => dishName.compareTo(other.dishName);
 }

@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onSignUpClicked() {
-    MainAppNav.navigator.currentState?.pushNamed(MainAppNav.signUpRoute);
+    MainAppNav.navigator.currentState?.pushNamed(MainAppNavDestinations.signUp.route);
   }
 
   @override
@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     _viewModel.onNavigateToDishesScreenStream.listen((event) {
-      MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNav.dishesMainDrawerRoute);
+      MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNavDestinations.dishesMainDrawer.route);
     });
   }
 

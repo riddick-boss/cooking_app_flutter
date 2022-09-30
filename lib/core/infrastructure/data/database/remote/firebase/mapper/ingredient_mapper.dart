@@ -10,7 +10,7 @@ extension IngredientMapper on Ingredient {
 }
 
 extension ListIngredientMapper on List<Ingredient> {
-  List<FirestoreIngredient> toFireStoreIngredients() => map((ingredient) => ingredient.toFirestoreIngredient()).toList();
+  List<FirestoreIngredient> toFirestoreIngredients() => map((ingredient) => ingredient.toFirestoreIngredient()).toList();
 }
 
 extension FirestoreIngredientMapper on FirestoreIngredient {

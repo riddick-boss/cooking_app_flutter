@@ -3,7 +3,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:cooking_app_flutter/domain/util/extension/list_extension.dart';
 
 extension DishPhotoMapper on DishPhoto {
-  FireStoreDishPhoto toFireStoreDishPhoto() => FireStoreDishPhoto(
+  FirestoreDishPhoto toFirestoreDishPhoto() => FirestoreDishPhoto(
     photoUrl: photoUrl,
     sortOrder: sortOrder,
     id: id,
@@ -11,10 +11,10 @@ extension DishPhotoMapper on DishPhoto {
 }
 
 extension ListDishPhotoMapper on List<DishPhoto> {
-  List<FireStoreDishPhoto> toFireStoreDishPhotos() => map((photo) => photo.toFireStoreDishPhoto()).toList().sorted();
+  List<FirestoreDishPhoto> toFirestoreDishPhotos() => map((photo) => photo.toFirestoreDishPhoto()).toList().sorted();
 }
 
-extension FireStoreDishPhotoMapper on FireStoreDishPhoto {
+extension FirestoreDishPhotoMapper on FirestoreDishPhoto {
   DishPhoto toDishPhoto() => DishPhoto(
       photoUrl: photoUrl,
       sortOrder: sortOrder,
@@ -22,6 +22,6 @@ extension FireStoreDishPhotoMapper on FireStoreDishPhoto {
   );
 }
 
-extension ListFireStoreDishPhotoMapper on List<FireStoreDishPhoto> {
+extension ListFirestoreDishPhotoMapper on List<FirestoreDishPhoto> {
   List<DishPhoto> toDishPhotos() => map((photo) => photo.toDishPhoto()).toList().sorted();
 }

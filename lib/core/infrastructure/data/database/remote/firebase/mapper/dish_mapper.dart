@@ -9,9 +9,9 @@ extension DishMapper on Dish {
         dishName: dishName,
         preparationTimeInMinutes: preparationTimeInMinutes,
         category: category,
-        ingredients: ingredients.toFireStoreIngredients(),
+        ingredients: ingredients.toFirestoreIngredients(),
         preparationStepsGroups: preparationStepsGroups.toFirestorePreparationStepsGroups(),
-        photos: photos.toFireStoreDishPhotos(),
+        photos: photos.toFirestoreDishPhotos(),
         dishId: dishId,
       );
 }

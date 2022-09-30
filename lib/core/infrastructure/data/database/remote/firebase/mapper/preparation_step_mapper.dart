@@ -3,7 +3,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:cooking_app_flutter/domain/util/extension/list_extension.dart';
 
 extension PreparationStepMapper on PreparationStep {
-  FireStorePreparationStep toFirestorePreparationStep() => FireStorePreparationStep(
+  FirestorePreparationStep toFirestorePreparationStep() => FirestorePreparationStep(
       name: name,
       sortOrder: sortOrder,
       id: id,
@@ -11,10 +11,10 @@ extension PreparationStepMapper on PreparationStep {
 }
 
 extension ListPreparationStepMapper on List<PreparationStep> {
-  List<FireStorePreparationStep> toFirestorePreparationSteps() => map((step) => step.toFirestorePreparationStep()).toList().sorted();
+  List<FirestorePreparationStep> toFirestorePreparationSteps() => map((step) => step.toFirestorePreparationStep()).toList().sorted();
 }
 
-extension FirestorePreparationStepMapper on FireStorePreparationStep {
+extension FirestorePreparationStepMapper on FirestorePreparationStep {
   PreparationStep toPreparationStep() => PreparationStep(
       name: name,
       sortOrder: sortOrder,
@@ -22,6 +22,6 @@ extension FirestorePreparationStepMapper on FireStorePreparationStep {
   );
 }
 
-extension ListFirestorePreparationStepMapper on List<FireStorePreparationStep> {
+extension ListFirestorePreparationStepMapper on List<FirestorePreparationStep> {
   List<PreparationStep> toPreparationSteps() => map((step) => step.toPreparationStep()).toList().sorted();
 }

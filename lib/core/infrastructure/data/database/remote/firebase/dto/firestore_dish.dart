@@ -15,13 +15,12 @@ class FirestoreDish {
     this.dishId,
   });
 
-  factory FirestoreDish.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    // SnapshotOptions? options,
-    List<FirestoreIngredient> ingredients,
-    List<FireStorePreparationStepsGroup> preparationStepsGroups,
-    List<FireStoreDishPhoto> photos,
-  ) {
+  factory FirestoreDish.fromFirestore({
+    required DocumentSnapshot<Map<String, dynamic>> snapshot,
+    required List<FirestoreIngredient> ingredients,
+    required List<FirestorePreparationStepsGroup> preparationStepsGroups,
+    required List<FirestoreDishPhoto> photos,
+  }) {
     final data = snapshot.data();
     if(data == null) throw ArgumentError("Dish data from firebase is null!");
     return FirestoreDish(
@@ -31,7 +30,7 @@ class FirestoreDish {
       ingredients: ingredients,
       preparationStepsGroups: preparationStepsGroups,
       photos: photos,
-      dishId: data[_FirestoreDishFields.dishId] as String,
+      dishId: snapshot.id,
     );
   }
 
@@ -45,8 +44,8 @@ class FirestoreDish {
   final int preparationTimeInMinutes;
   final String category;
   final List<FirestoreIngredient> ingredients;
-  final List<FireStorePreparationStepsGroup> preparationStepsGroups;
-  final List<FireStoreDishPhoto> photos;
+  final List<FirestorePreparationStepsGroup> preparationStepsGroups;
+  final List<FirestoreDishPhoto> photos;
   final String? dishId;
 }
 
@@ -54,5 +53,4 @@ class _FirestoreDishFields {
   static const dishName = 'dish_name';
   static const preparationTimeInMinutes = 'preparation_time_in_minutes';
   static const category = 'category';
-  static const dishId = 'dish_id';
 }

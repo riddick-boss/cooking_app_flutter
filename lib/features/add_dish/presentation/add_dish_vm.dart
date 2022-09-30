@@ -20,7 +20,7 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/subjects.dart';
 
 @injectable
-class AddDishViewModel {
+class AddDishViewModel { // add remote source ?
   final _dbManager = getIt<RemoteDatabaseManager>();
   final _permissionsManager = getIt<PermissionsManager>();
   final _imagePicker = getIt<ImagePicker>();

@@ -28,7 +28,7 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
     super.initState();
 
     _viewModel.onNavigateToLogInScreenStream.listen((event) {
-      MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNav.loginRoute, (route) => false); // clear stack and go to login screen
+      MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNavDestinations.login.route, (route) => false); // clear stack and go to login screen
     });
   }
 
@@ -126,7 +126,7 @@ class DishesDrawerFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FloatingActionButton(
     onPressed: () {
-      MainAppNav.navigator.currentState?.pushNamed(MainAppNav.addDishRoute);
+      MainAppNav.navigator.currentState?.pushNamed(MainAppNavDestinations.addDish.route);
     },
     backgroundColor: Colors.indigoAccent,
     child: const Icon(Icons.add),

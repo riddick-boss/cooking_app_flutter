@@ -1,17 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
-class FireStoreDishPhoto extends Comparable<FireStoreDishPhoto> {
-  FireStoreDishPhoto({
+class FirestoreDishPhoto extends Comparable<FirestoreDishPhoto> {
+  FirestoreDishPhoto({
     required this.photoUrl,
     required this.sortOrder,
     this.id,
   });
 
-  //TODO: factory fromFirestore
+  factory FirestoreDishPhoto.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+  ) {
+    final data = snapshot.data();
+    if (data == null) throw ArgumentError("Dish photo data from firebase is null!");
+    return FirestoreDishPhoto(
+      photoUrl: data[_FirestoreDishPhotoFields.photoUrl] as String,
+      sortOrder: data[_FirestoreDishPhotoFields.sortOrder] as int,
+      id: snapshot.id,
+    );
+  }
 
   Map<String, dynamic> toFirestore(String downloadUrl) => {
-        _FireStoreDishPhotoFields.photoUrl: downloadUrl,
-        _FireStoreDishPhotoFields.sortOrder: sortOrder,
+        _FirestoreDishPhotoFields.photoUrl: downloadUrl,
+        _FirestoreDishPhotoFields.sortOrder: sortOrder,
       };
 
   final String photoUrl;
@@ -27,11 +38,10 @@ class FireStoreDishPhoto extends Comparable<FireStoreDishPhoto> {
   }
 
   @override
-  int compareTo(FireStoreDishPhoto other) => sortOrder.compareTo(other.sortOrder);
+  int compareTo(FirestoreDishPhoto other) => sortOrder.compareTo(other.sortOrder);
 }
 
-class _FireStoreDishPhotoFields {
+class _FirestoreDishPhotoFields {
   static const photoUrl = "photoUrl";
   static const sortOrder = "sortOrder";
-  static const id = "id";
 }

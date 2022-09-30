@@ -9,14 +9,13 @@ class FirestoreIngredient {
 
   factory FirestoreIngredient.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
-    // SnapshotOptions? options,
   ) {
     final data = snapshot.data();
     if (data == null) throw ArgumentError("Ingredients data from firebase is null!");
     return FirestoreIngredient(
       name: data[_FirestoreIngredientFields.name] as String,
       quantity: data[_FirestoreIngredientFields.quantity] as String?,
-      id: data[_FirestoreIngredientFields.id] as String,
+      id: snapshot.id,
     );
   }
 
@@ -33,5 +32,4 @@ class FirestoreIngredient {
 class _FirestoreIngredientFields {
   static const name = 'name';
   static const quantity = 'quantity';
-  static const id = 'id';
 }

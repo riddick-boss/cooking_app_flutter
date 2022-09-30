@@ -4,7 +4,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 import 'package:cooking_app_flutter/domain/util/extension/list_extension.dart';
 
 extension PreparationStepsGroupMapper on PreparationStepsGroup {
-  FireStorePreparationStepsGroup toFirestorePreparationStepsGroup() => FireStorePreparationStepsGroup(
+  FirestorePreparationStepsGroup toFirestorePreparationStepsGroup() => FirestorePreparationStepsGroup(
     name: name,
     sortOrder: sortOrder,
     steps: steps.toFirestorePreparationSteps(),
@@ -13,10 +13,10 @@ extension PreparationStepsGroupMapper on PreparationStepsGroup {
 }
 
 extension ListPreparationStepsGroupMapper on List<PreparationStepsGroup> {
-  List<FireStorePreparationStepsGroup> toFirestorePreparationStepsGroups() => map((group) => group.toFirestorePreparationStepsGroup()).toList().sorted();
+  List<FirestorePreparationStepsGroup> toFirestorePreparationStepsGroups() => map((group) => group.toFirestorePreparationStepsGroup()).toList().sorted();
 }
 
-extension FireStorePreparationStepsGroupMapper on FireStorePreparationStepsGroup {
+extension FirestorePreparationStepsGroupMapper on FirestorePreparationStepsGroup {
   PreparationStepsGroup toPreparationStepsGroup() => PreparationStepsGroup(
       name: name,
       sortOrder: sortOrder,
@@ -25,6 +25,6 @@ extension FireStorePreparationStepsGroupMapper on FireStorePreparationStepsGroup
   );
 }
 
-extension ListFireStorePreparationStepsGroupMapper on List<FireStorePreparationStepsGroup> {
+extension ListFirestorePreparationStepsGroupMapper on List<FirestorePreparationStepsGroup> {
   List<PreparationStepsGroup> toPreparationStepsGroups() => map((group) => group.toPreparationStepsGroup()).toList().sorted();
 }
