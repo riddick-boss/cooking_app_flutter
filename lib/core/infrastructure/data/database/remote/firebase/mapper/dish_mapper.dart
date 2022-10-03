@@ -6,7 +6,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 
 extension DishMapper on Dish {
   FirestoreDish toFirestoreDish() => FirestoreDish(
-        dishName: dishName,
+        dishName: name,
         preparationTimeInMinutes: preparationTimeInMinutes,
         category: category,
         ingredients: ingredients.toFirestoreIngredients(),
@@ -18,7 +18,7 @@ extension DishMapper on Dish {
 
 extension FirestoreDishMapper on FirestoreDish {
   Dish toDish() => Dish(
-        dishName: dishName,
+        name: dishName,
         preparationTimeInMinutes: preparationTimeInMinutes,
         category: category,
         ingredients: ingredients.toIngredients(),

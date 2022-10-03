@@ -18,7 +18,7 @@ class _DishesScreenState extends State<DishesScreen> {
   final _viewModel = getIt<DishesViewModel>();
 
   void onDishClicked(String dishId) {
-    MainAppNav.navigator.currentState?.pushNamed(MainAppNavDestinations.userDish.route);
+    MainAppNav.navigator.currentState?.pushNamed(MainAppNavDestinations.userDish.route, arguments: dishId);
   }
 
   @override
@@ -42,7 +42,7 @@ class _DishesScreenState extends State<DishesScreen> {
 
           if(dishes.isEmpty) { // TODO: what in case of exception?
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator.adaptive(),
             );
           }
 
@@ -51,7 +51,7 @@ class _DishesScreenState extends State<DishesScreen> {
               clipBehavior: Clip.antiAlias,
               children: <Widget>[
                 for(final dish in dishes)
-                  GestureDetector(
+                  GestureDetector( // TODO: as separate widget
                     key: ValueKey(dish.dishId!),
                     onTap: () { onDishClicked(dish.dishId!); },
                     child: Container(
@@ -65,7 +65,7 @@ class _DishesScreenState extends State<DishesScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Center(
-                            child: Text(dish.dishName,
+                            child: Text(dish.name,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Colors.white,

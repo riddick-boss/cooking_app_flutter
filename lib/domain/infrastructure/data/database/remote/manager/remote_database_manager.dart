@@ -11,6 +11,8 @@ abstract class RemoteDatabaseManager {
   });
 
   Future<UnmodifiableListView<Dish>> getAllDishes();
+
+  Future<Dish> getDish(String dishId);
   
   Future<void> createDish(Dish dish);
 }

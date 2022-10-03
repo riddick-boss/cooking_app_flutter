@@ -4,7 +4,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/m
 
 class Dish extends Comparable<Dish>{
   Dish({
-    required this.dishName,
+    required this.name,
     required this.preparationTimeInMinutes,
     required this.category,
     required this.ingredients,
@@ -13,7 +13,7 @@ class Dish extends Comparable<Dish>{
     this.dishId,
   });
 
-  final String dishName;
+  final String name;
   final int preparationTimeInMinutes;
   final String category;
   final List<Ingredient> ingredients;
@@ -22,5 +22,5 @@ class Dish extends Comparable<Dish>{
   final String? dishId;
 
   @override
-  int compareTo(Dish other) => dishName.compareTo(other.dishName);
+  int compareTo(Dish other) => name.compareTo(other.name);
 }
