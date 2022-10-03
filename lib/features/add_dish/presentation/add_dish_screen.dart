@@ -126,7 +126,7 @@ class _AddDishScreenState extends State<AddDishScreen> { // TODO: separate scree
                       children: <Widget>[
                         for(final ingredient in ingredients)
                           ListTile(
-                            key: ValueKey(ingredient.hashCode),
+                            key: UniqueKey(),
                             title: Text(ingredient.name),
                             subtitle: ingredient.quantity.isNullOrEmpty
                               ? null
@@ -192,7 +192,7 @@ class _AddDishScreenState extends State<AddDishScreen> { // TODO: separate scree
                                   children: [
                                     for(final step in steps)
                                       ListTile(
-                                        key: ValueKey(step.hashCode),
+                                        key: UniqueKey(),
                                         title: Text(step),
                                         trailing: IconButton(onPressed: () { _viewModel.onPreparationStepRemoved(groupName, step); }, icon: const Icon(Icons.remove)),
                                       )

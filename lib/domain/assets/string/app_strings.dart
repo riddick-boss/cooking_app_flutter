@@ -60,4 +60,8 @@ class AppStrings {
 
   // dishes list
   static const String dishesListLoadingError = "Failed to load dishes!";
+
+  // dish
+  static const String dishTitle = "Dish";
+  static const String dishLoadingError = "Failed to load dish!";
 }

@@ -93,7 +93,7 @@ class AddDishViewModel { // add remote source ?
   final _clearNewIngredientTextFields = PublishSubject<Unit>();
   Stream<Unit> get clearNewIngredientTextFields => _clearNewIngredientTextFields.stream;
 
-  void onAddIngredientClicked() {
+  void onAddIngredientClicked() { // fixme: after adding ingredient textField clears, but next ingredient keeps value
     final name = _newIngredientName.value;
     final quantity = _newIngredientQuantity.value;
     if (name.isEmpty) return;
@@ -193,7 +193,7 @@ class AddDishViewModel { // add remote source ?
     final dish = Dish(
       category: _dishCategory.value,
       preparationTimeInMinutes: _preparationTime.value,
-      dishName: _dishName.value,
+      name: _dishName.value,
       ingredients: _ingredients.value,
       preparationStepsGroups: _createPreparationStepsGroups(),
       photos: _createDishPhotosList(_photosPaths.value),

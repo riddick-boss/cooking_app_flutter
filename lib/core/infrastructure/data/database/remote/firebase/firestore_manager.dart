@@ -55,6 +55,17 @@ class FirestoreManager implements RemoteDatabaseManager {
   }
 
   @override
+  Future<Dish> getDish(String dishId) async {
+    final dishSnapshot = await _userDishesCollection.doc(dishId).get();
+    return FirestoreDish.fromFirestore(
+      snapshot: dishSnapshot,
+      ingredients: await _getIngredients(dishSnapshot.id),
+      preparationStepsGroups: await _getPreparationStepsGroups(dishSnapshot.id),
+      photos: await _getDishPhotos(dishSnapshot.id),
+    ).toDish();
+  }
+
+  @override
   Future<void> createDish(Dish dish) async {
     final firestoreDish = dish.toFirestoreDish();
     final dishDoc = await _userDishesCollection.add(firestoreDish.toFirestore());
