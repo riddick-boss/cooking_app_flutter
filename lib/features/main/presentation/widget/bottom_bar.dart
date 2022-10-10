@@ -1,4 +1,4 @@
-import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/bottom_bar_screens.dart';
+import 'package:cooking_app_flutter/features/main/presentation/bottom_bar_screens.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatelessWidget {

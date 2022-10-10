@@ -6,7 +6,7 @@ import 'package:cooking_app_flutter/domain/util/unit.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class DishesMainDrawerViewModel {
+class MainViewModel {
   final _authManager = getIt<AuthManager>();
 
   Stream<Unit> get logoutStream =>

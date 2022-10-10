@@ -1,20 +1,20 @@
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/domain/presentation/widget/glass_box.dart';
-import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/bottom_bar_screens.dart';
-import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/dishes_main_drawer_vm.dart';
-import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/widget/bottom_bar.dart';
+import 'package:cooking_app_flutter/features/main/presentation/bottom_bar_screens.dart';
+import 'package:cooking_app_flutter/features/main/presentation/main_vm.dart';
+import 'package:cooking_app_flutter/features/main/presentation/widget/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
-class DishesMainDrawerScreen extends StatefulWidget {
-  const DishesMainDrawerScreen({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State createState() => _DishesMainDrawerScreenState();
+  State createState() => _MainScreenState();
 }
 
-class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
-  final _viewModel = getIt<DishesMainDrawerViewModel>();
+class _MainScreenState extends State<MainScreen> {
+  final _viewModel = getIt<MainViewModel>();
 
   //bottom bar nav
   int _currentBottomIndex = 0;

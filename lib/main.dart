@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
         navigatorKey: MainAppNav.navigator,
         theme: ThemeData(
           colorScheme: AppColors.defaultColorScheme,
-          primarySwatch: Colors.blue, // TODO
         ),
         initialRoute: initialRoute,
         routes: MainAppNav.routesMap,

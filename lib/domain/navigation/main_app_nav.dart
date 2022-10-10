@@ -1,7 +1,7 @@
 import 'package:cooking_app_flutter/features/add_dish/presentation/add_dish_screen.dart';
 import 'package:cooking_app_flutter/features/dish/presentation/dish_screen.dart';
-import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/dishes_main_drawer_screen.dart';
 import 'package:cooking_app_flutter/features/login/presentation/login_screen.dart';
+import 'package:cooking_app_flutter/features/main/presentation/main_screen.dart';
 import 'package:cooking_app_flutter/features/sign_up/presentation/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +38,7 @@ extension Screen on MainAppNavDestinations {
     switch(this) {
       case MainAppNavDestinations.login: return const LoginScreen();
       case MainAppNavDestinations.signUp: return const SignUpScreen();
-      case MainAppNavDestinations.dishesMainDrawer: return const DishesMainDrawerScreen();
+      case MainAppNavDestinations.dishesMainDrawer: return const MainScreen();
       case MainAppNavDestinations.addDish: return const AddDishScreen();
       case MainAppNavDestinations.userDish: return const DishScreen();
     }
