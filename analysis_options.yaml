@@ -7,3 +7,6 @@ linter:
     lines_longer_than_80_chars: false
     flutter_style_todos: false
     sort_pub_dependencies: false
+
+analyzer:
+  exclude: [build/**, lib/**.frezzed.dart, lib/**.g.dart, lib/**.config.dart, lib/firebase/firebase_options.dart]
