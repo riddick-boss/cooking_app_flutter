@@ -31,8 +31,7 @@ class _DishesScreenState extends State<DishesScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: StreamBuilder<List<Dish>>(
         stream: _viewModel.dishesStream,
@@ -56,5 +55,4 @@ class _DishesScreenState extends State<DishesScreen> {
         },
       ),
     );
-  }
 }

@@ -10,23 +10,23 @@ class DishCard extends StatelessWidget {
   final void Function(Dish) onTap;
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: () { onTap(dish); },
-    child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          height: 200,
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 5,
-                offset: Offset(0, 9),
-              )
-            ],
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.yellow,
-          ),
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        height: 200,
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 5,
+              offset: Offset(0, 9),
+            )
+          ],
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.blueAccent,
+        ),
+        child: InkWell(
+          onTap: () { onTap(dish); },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -60,7 +60,7 @@ class DishCard extends StatelessWidget {
             ],
           ),
         ),
-  );
+      );
 }
 
 class _TextWithLabel extends StatelessWidget {

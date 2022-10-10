@@ -35,7 +35,7 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blue[900],
         extendBody: true,
         bottomNavigationBar: GlassBox(
           child: BottomBar(
@@ -45,6 +45,6 @@ class _DishesMainDrawerScreenState extends State<DishesMainDrawerScreen> {
         ),
         body: BottomBarScreen.values.screens[_currentBottomIndex],
         floatingActionButton: BottomBarScreen.values[_currentBottomIndex].fab,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // TODO: experiment with it
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       );
 }

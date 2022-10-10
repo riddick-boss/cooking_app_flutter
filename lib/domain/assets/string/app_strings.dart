@@ -37,9 +37,6 @@ class AppStrings {
   // my dishes
   static const String myDishesTitle = "My dishes";
 
-  // public
-  static const String publicTitle = "Public"; // todo: change text
-
   // add dish
   static const String addDishTitle = "Add dish";
   static const String addDishPermissionsDeniedSnackBarMessage = "Cannot perform this operation without permissions!";
@@ -64,4 +61,9 @@ class AppStrings {
   // dish
   static const String dishTitle = "Dish";
   static const String dishLoadingError = "Failed to load dish!";
+
+  // account
+  static String accountTitle(String? name) => (name != null) ? "Hi, \n$name" : "Hi!";
+  static const String accountLogoutButton = "Logout";
+  static const String accountProvidedBy = "Provided by AbandonedStudio";
 }

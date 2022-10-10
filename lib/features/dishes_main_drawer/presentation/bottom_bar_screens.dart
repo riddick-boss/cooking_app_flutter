@@ -1,3 +1,4 @@
+import 'package:cooking_app_flutter/features/account/presentation/account_screen.dart';
 import 'package:cooking_app_flutter/features/dishes/presentation/dishes_screen.dart';
 import 'package:cooking_app_flutter/features/dishes_main_drawer/presentation/widget/dishes_fab.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ extension Screen on BottomBarScreen {
       // case BottomBarScreen.shopping:
         // return Center(child: Text("Shopping"),);
       case BottomBarScreen.account:
-        return Center(child: Text("Account"),);
+        return const AccountScreen();
     }
   }
 }
