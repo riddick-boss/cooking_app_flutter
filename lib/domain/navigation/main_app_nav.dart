@@ -16,7 +16,7 @@ class MainAppNav { // TODO: named routes are no longer recommended (https://docs
 enum MainAppNavDestinations {
   login,
   signUp,
-  dishesMainDrawer,
+  main,
   addDish,
   userDish,
 }
@@ -26,7 +26,7 @@ extension Route on MainAppNavDestinations {
     switch(this) {
       case MainAppNavDestinations.login: return "/mainAppNav/login";
       case MainAppNavDestinations.signUp: return "/mainAppNav/signUp";
-      case MainAppNavDestinations.dishesMainDrawer: return "/mainAppNav/dishesMainDrawer";
+      case MainAppNavDestinations.main: return "/mainAppNav/dishesMainDrawer";
       case MainAppNavDestinations.addDish: return "/mainAppNav/addDish";
       case MainAppNavDestinations.userDish: return "/mainAppNav/userDish";
     }
@@ -38,7 +38,7 @@ extension Screen on MainAppNavDestinations {
     switch(this) {
       case MainAppNavDestinations.login: return const LoginScreen();
       case MainAppNavDestinations.signUp: return const SignUpScreen();
-      case MainAppNavDestinations.dishesMainDrawer: return const MainScreen();
+      case MainAppNavDestinations.main: return const MainScreen();
       case MainAppNavDestinations.addDish: return const AddDishScreen();
       case MainAppNavDestinations.userDish: return const DishScreen();
     }
