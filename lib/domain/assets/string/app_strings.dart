@@ -61,9 +61,11 @@ class AppStrings {
   // dish
   static const String dishTitle = "Dish";
   static const String dishLoadingError = "Failed to load dish!";
+  static const String dishIngredientsTitle = "Ingredients:";
+  static const String dishPreparationStepsGroupsTitle = "Preparation steps";
 
   // account
   static String accountTitle(String? name) => (name != null) ? "Hi, \n$name" : "Hi!";
   static const String accountLogoutButton = "Logout";
-  static const String accountProvidedBy = "Provided by AbandonedStudio";
+  static const String accountProvidedBy = "Provided by AbandonedSpace";
 }
