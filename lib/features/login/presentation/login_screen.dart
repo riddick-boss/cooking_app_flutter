@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     _viewModel.onNavigateToDishesScreenStream.listen((event) {
-      MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNavDestinations.dishesMainDrawer.route);
+      MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNavDestinations.main.route);
     });
   }
 

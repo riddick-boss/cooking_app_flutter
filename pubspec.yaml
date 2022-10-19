@@ -19,7 +19,7 @@ dependencies:
 #   Generates code by providing annotations
   injectable: ^1.5.3
 #   Allows converting json to dart class and back
-  json_serializable: ^6.4.0
+  json_serializable: ^6.5.0
   json_annotation: ^4.7.0
 #   Linting
   very_good_analysis: ^3.1.0
@@ -29,25 +29,25 @@ dependencies:
   freezed: ^2.1.0+1
   freezed_annotation: ^2.1.0
 #   Firebase
-  firebase_core: ^1.22.0
+  firebase_core: ^1.24.0
 #   Firebase auth
-  firebase_auth: ^3.9.0
+  firebase_auth: ^3.11.2
 #   Firebase database
-  cloud_firestore: ^3.4.8
+  cloud_firestore: ^3.5.1
 #   Firebase storage
-  firebase_storage: ^10.3.8
+  firebase_storage: ^10.3.11
   #   Email validator
   email_validator: ^2.1.17
 #   Picking images
-  image_picker: ^0.8.5+3
+  image_picker: ^0.8.6
 #   Permissions handling
-  permission_handler: ^10.0.1
+  permission_handler: ^10.1.0
 #  Reactive
   rxdart: ^0.27.5
 #  Collections utilities
   collection: ^1.16.0
 # Bottom number picker:
-  bottom_picker: ^1.9.1
+  bottom_picker: ^2.0.0
 
 dev_dependencies:
   flutter_test:

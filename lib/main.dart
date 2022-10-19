@@ -15,7 +15,7 @@ Future<dynamic> main() async {
   final authManager = getIt<AuthManager>();
   final initialRoute = authManager.currentUser == null
       ? MainAppNavDestinations.login.route
-      : MainAppNavDestinations.dishesMainDrawer.route;
+      : MainAppNavDestinations.main.route;
 
   runApp(
     MyApp(
@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
         navigatorKey: MainAppNav.navigator,
         theme: ThemeData(
           colorScheme: AppColors.defaultColorScheme,
-          primarySwatch: Colors.blue, // TODO
         ),
         initialRoute: initialRoute,
         routes: MainAppNav.routesMap,
