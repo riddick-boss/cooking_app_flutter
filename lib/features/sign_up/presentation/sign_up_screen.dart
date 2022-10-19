@@ -49,7 +49,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
 
     _viewModel.onNavigateToDishesScreenStream.listen((event) {
-      MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNavDestinations.dishesMainDrawer.route, (route) => false); // clear stack and go to dishes screen
+      MainAppNav.navigator.currentState?.pushNamedAndRemoveUntil(MainAppNavDestinations.main.route, (route) => false); // clear stack and go to dishes screen
     });
   }
 

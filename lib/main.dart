@@ -15,7 +15,7 @@ Future<dynamic> main() async {
   final authManager = getIt<AuthManager>();
   final initialRoute = authManager.currentUser == null
       ? MainAppNavDestinations.login.route
-      : MainAppNavDestinations.dishesMainDrawer.route;
+      : MainAppNavDestinations.main.route;
 
   runApp(
     MyApp(
