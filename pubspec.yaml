@@ -48,6 +48,8 @@ dependencies:
   collection: ^1.16.0
 # Bottom number picker:
   bottom_picker: ^2.0.1
+# EasyLoading
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:

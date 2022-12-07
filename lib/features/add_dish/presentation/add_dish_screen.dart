@@ -6,8 +6,10 @@ import 'package:cooking_app_flutter/domain/presentation/widget/platform_aware_im
 import 'package:cooking_app_flutter/domain/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
 import 'package:cooking_app_flutter/domain/util/unit.dart';
+import 'package:cooking_app_flutter/features/add_dish/data/dish_upload_status.dart';
 import 'package:cooking_app_flutter/features/add_dish/presentation/add_dish_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class AddDishScreen extends StatefulWidget {
   const AddDishScreen({super.key});
@@ -27,6 +29,31 @@ class _AddDishScreenState extends State<AddDishScreen> {
 
     _viewModel.showSnackBarStream.listen((message) {
       showSnackBar(context, message);
+    });
+
+    _viewModel.progressIndicatorStatus.listen((event) {
+      switch (event) {
+        case null:
+          {
+            EasyLoading.dismiss();
+            break;
+          }
+        case DishUploadStatus.uploading:
+          {
+            EasyLoading.show(status: AppStrings.addDishUploading);
+            break;
+          }
+        case DishUploadStatus.success:
+          {
+            EasyLoading.showSuccess(AppStrings.easyLoadingSuccess);
+            break;
+          }
+        case DishUploadStatus.failure:
+          {
+            EasyLoading.showError(AppStrings.easyLoadingFailure);
+            break;
+          }
+      }
     });
   }
 
@@ -475,6 +502,7 @@ class _PhotosContainerState extends State<_PhotosContainer> {
         itemBuilder: (context, index) => Transform.scale(
           scale: index == _currentPhotoIndex ? 1 : 0.9,
           child: Card(
+            color: Colors.blueAccent,
             elevation: 10,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),

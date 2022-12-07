@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
@@ -14,6 +15,7 @@ import 'package:cooking_app_flutter/domain/util/cast.dart';
 import 'package:cooking_app_flutter/domain/util/extension/behavior_subject_list_extension.dart';
 import 'package:cooking_app_flutter/domain/util/extension/list_extension.dart';
 import 'package:cooking_app_flutter/domain/util/unit.dart';
+import 'package:cooking_app_flutter/features/add_dish/data/dish_upload_status.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
@@ -189,6 +191,19 @@ class AddDishViewModel {
           )
           .toList();
 
+  //progress indicator
+  final _progressIndicatorStatus =
+      BehaviorSubject<DishUploadStatus?>.seeded(null);
+
+  Stream<DishUploadStatus?> get progressIndicatorStatus =>
+      _progressIndicatorStatus.stream;
+
+  Future<void> _showProgressStatusAndDismiss(DishUploadStatus status) async {
+    _progressIndicatorStatus.add(status);
+    await Future.delayed(const Duration(seconds: 4));
+    _progressIndicatorStatus.add(null);
+  }
+
   //create dish
   Future<void> onCreateDishClicked() async {
     final dish = Dish(
@@ -199,12 +214,16 @@ class AddDishViewModel {
       preparationStepsGroups: _createPreparationStepsGroups(),
       photos: _createDishPhotosList(_photosPaths.value),
     );
+    _progressIndicatorStatus.add(DishUploadStatus.uploading);
     try {
       await _dbManager.createDish(dish);
-      // TODO: show info to user
+      await _showProgressStatusAndDismiss(DishUploadStatus.success);
+      _showSnackBarSubject
+          .add(AppStrings.addDishCreationSuccessSnackBarMessage);
     } catch (e) {
-      debugPrint("error during dish creation: $e");
-      //TODO: show  info to user
+      await _showProgressStatusAndDismiss(DishUploadStatus.failure);
+      _showSnackBarSubject
+          .add(AppStrings.addDishCreationFailureSnackBarMessage);
     }
   }
 

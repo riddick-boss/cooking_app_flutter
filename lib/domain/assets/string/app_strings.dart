@@ -54,6 +54,9 @@ class AppStrings {
   static const String addDishStepsGroupNameLabel = "Steps group name";
   static const String addDishStepLabel = "Step name";
   static const String addDishSubmitPreparationTimeButton = "Submit";
+  static const String addDishCreationFailureSnackBarMessage = "Dish creation failure! Try again in a moment!";
+  static const String addDishCreationSuccessSnackBarMessage = "Dish created successfully! Now you can go back and see it";
+  static const String addDishUploading = "Creating dish...";
   static String addDishPreparationTime(int time) => 'Preparation time: $time';
 
   // dishes list
@@ -69,4 +72,8 @@ class AppStrings {
   static String accountTitle(String? name) => (name != null) ? "Hi, \n$name" : "Hi!";
   static const String accountLogoutButton = "Logout";
   static const String accountProvidedBy = "Provided by AbandonedSpace";
+
+  //easy loading indicator
+  static const String easyLoadingSuccess = "Success";
+  static const String easyLoadingFailure = "Failure";
 }
