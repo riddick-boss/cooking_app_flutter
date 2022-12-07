@@ -38,8 +38,11 @@ class _AddDishScreenState extends State<AddDishScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Colors.lightBlue[800],
         appBar: AppBar(
           title: const Text(AppStrings.addDishTitle),
+          backgroundColor: Colors.blue[700],
+          foregroundColor: Colors.yellow,
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -89,9 +92,8 @@ class _AddDishScreenState extends State<AddDishScreen> {
                   stepsChanged: _viewModel.stepsChanged,
                   onPreparationStepsReordered:
                       _viewModel.onPreparationStepsReordered,
-                  onPreparationStepRemoved: _viewModel.onRemovePreparationStepClicked,
-                  newPreparationStepNameController:
-                      _viewModel.newPreparationStepNameController,
+                  onPreparationStepRemoved:
+                      _viewModel.onRemovePreparationStepClicked,
                   onAddPreparationStepClicked:
                       _viewModel.onAddPreparationStepClicked,
                 ),
@@ -157,8 +159,15 @@ class _PreparationTimeRow extends StatelessWidget {
         fontWeight: FontWeight.bold,
         fontSize: 15,
       ),
-      items: List<Text>.generate(_preparationTimeMaxRange, (i) => Text("$i")),
+      items: List<Text>.generate(
+        _preparationTimeMaxRange,
+        (i) => Text(
+          "$i",
+          textAlign: TextAlign.center,
+        ),
+      ),
       dismissable: true,
+      buttonText: AppStrings.addDishSubmitPreparationTimeButton,
       selectedItemIndex: time,
       onSubmit: onTimeChange,
     ).show(context);
@@ -167,7 +176,12 @@ class _PreparationTimeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
         children: [
-          Expanded(child: Text(AppStrings.addDishPreparationTime(time))),
+          Expanded(
+            child: Text(
+              AppStrings.addDishPreparationTime(time),
+              style: const TextStyle(fontSize: 20),
+            ),
+          ),
           InkWell(
             onTap: _showTimePicker,
             child: const Icon(Icons.edit),
@@ -190,17 +204,24 @@ class _IngredientsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (ingredients == null) {
-      return const Text(AppStrings.addDishIngredientsHeader);
+      return const Text(
+        AppStrings.addDishIngredientsHeader,
+        style: TextStyle(fontSize: 20),
+      );
     }
 
     return ReorderableListView(
       physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
       onReorder: onListReordered,
-      header: const Text(AppStrings.addDishIngredientsHeader),
+      header: const Text(
+        AppStrings.addDishIngredientsHeader,
+        style: TextStyle(fontSize: 20),
+      ),
       children: <Widget>[
         for (final ingredient in ingredients!)
           ListTile(
+            focusColor: Colors.yellow,
             key: UniqueKey(),
             title: Text(ingredient.name),
             subtitle: ingredient.quantity.isNullOrEmpty
@@ -210,7 +231,10 @@ class _IngredientsList extends StatelessWidget {
               onPressed: () {
                 onRemoveIngredientClicked(ingredient);
               },
-              icon: const Icon(Icons.remove),
+              icon: const Icon(
+                Icons.remove,
+                color: Colors.red,
+              ),
             ),
           )
       ],
@@ -264,7 +288,10 @@ class _PreparationStepsGroupsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const SizedBox(
         width: double.infinity,
-        child: Text(AppStrings.addDishPreparationStepsGroupsHeader),
+        child: Text(
+          AppStrings.addDishPreparationStepsGroupsHeader,
+          style: TextStyle(fontSize: 20),
+        ),
       );
 }
 
@@ -274,7 +301,6 @@ class _PreparationStepsGroupsList extends StatelessWidget {
     required this.stepsChanged,
     required this.onPreparationStepsReordered,
     required this.onPreparationStepRemoved,
-    required this.newPreparationStepNameController,
     required this.onAddPreparationStepClicked,
   });
 
@@ -283,7 +309,6 @@ class _PreparationStepsGroupsList extends StatelessWidget {
   final void Function(String groupName, int oldIdx, int newIdx)
       onPreparationStepsReordered;
   final void Function(String, String) onPreparationStepRemoved;
-  final TextEditingController newPreparationStepNameController;
   final void Function(String groupName, String stepName)
       onAddPreparationStepClicked;
 
@@ -307,7 +332,10 @@ class _PreparationStepsGroupsList extends StatelessWidget {
                 return ReorderableListView(
                   physics: const ClampingScrollPhysics(),
                   shrinkWrap: true,
-                  header: Text(groupName),
+                  header: Text(
+                    groupName,
+                    style: const TextStyle(fontSize: 18),
+                  ),
                   onReorder: (oldIdx, newIdx) {
                     onPreparationStepsReordered(groupName, oldIdx, newIdx);
                   },
@@ -320,37 +348,67 @@ class _PreparationStepsGroupsList extends StatelessWidget {
                           onPressed: () {
                             onPreparationStepRemoved(groupName, step);
                           },
-                          icon: const Icon(Icons.remove),
+                          icon: const Icon(
+                            Icons.remove,
+                            color: Colors.red,
+                          ),
                         ),
                       )
                   ],
                 );
               },
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: newPreparationStepNameController,
-                    decoration: const InputDecoration(
-                      labelText: AppStrings.addDishStepLabel,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    onAddPreparationStepClicked(
-                      groupName,
-                      newPreparationStepNameController.text,
-                    );
-                  },
-                  icon: const Icon(Icons.add),
-                )
-              ],
+            _AddPreparationStepRow(
+              groupName: groupName,
+              onAddClicked: onAddPreparationStepClicked,
             ),
+            const SizedBox(height: 15),
           ],
         );
       }).toList(),
+    );
+  }
+}
+
+class _AddPreparationStepRow extends StatefulWidget {
+  const _AddPreparationStepRow({
+    required this.groupName,
+    required this.onAddClicked,
+  });
+
+  final String groupName;
+  final void Function(String groupName, String stepName) onAddClicked;
+
+  @override
+  State<_AddPreparationStepRow> createState() => _AddPreparationStepRowState();
+}
+
+class _AddPreparationStepRowState extends State<_AddPreparationStepRow> {
+  final controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              labelText: AppStrings.addDishStepLabel,
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            widget.onAddClicked(
+              widget.groupName,
+              controller.text,
+            );
+            controller.clear();
+          },
+          icon: const Icon(Icons.add),
+        )
+      ],
     );
   }
 }
@@ -407,17 +465,17 @@ class _PhotosContainerState extends State<_PhotosContainer> {
       );
     }
     return SizedBox(
-      height: 400,
+      height: 300,
       child: PageView.builder(
         itemCount: widget.photosPaths!.length + 1, // + 1 for add button
-        controller: PageController(viewportFraction: 0.7),
+        controller: PageController(viewportFraction: 0.75),
         onPageChanged: (int i) => setState(() {
           _currentPhotoIndex = i;
         }),
         itemBuilder: (context, index) => Transform.scale(
           scale: index == _currentPhotoIndex ? 1 : 0.9,
           child: Card(
-            elevation: 0,
+            elevation: 10,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -426,7 +484,10 @@ class _PhotosContainerState extends State<_PhotosContainer> {
                     onPressed: widget.onPickPhotoClicked,
                     icon: const Icon(Icons.add_a_photo),
                   )
-                : PlatformAwareImage(imagePath: widget.photosPaths![index]),
+                : PlatformAwareImage(
+                    imagePath: widget.photosPaths![index],
+                    fit: BoxFit.fill,
+                  ),
           ),
         ),
       ),
@@ -444,11 +505,13 @@ class _AddDishButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onCreateDishClicked,
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+        padding: const EdgeInsets.symmetric(horizontal: 90, vertical: 10),
+        backgroundColor: Colors.yellowAccent,
       ),
       child: const Text(
         AppStrings.addDishCreateButton,
         style: TextStyle(
+          fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),

@@ -61,11 +61,11 @@ class AddDishViewModel {
       .toList(growable: false);
 
   Future<void> onPickPhotoClicked() async {
-    if (!(await _permissionsManager.arePhotosPermissionsGranted)) {
-      _showSnackBarSubject
-          .add(AppStrings.addDishPermissionsDeniedSnackBarMessage);
-      return;
-    }
+    // if (!(await _permissionsManager.arePhotosPermissionsGranted)) {
+    //   _showSnackBarSubject
+    //       .add(AppStrings.addDishPermissionsDeniedSnackBarMessage);
+    //   return;
+    // }
 
     final pickedPhoto =
         await _imagePicker.pickImage(source: ImageSource.gallery);
@@ -131,8 +131,6 @@ class AddDishViewModel {
       ..remove(key);
     _preparationStepsGroups.add(newMap);
   }
-
-  final newPreparationStepNameController = TextEditingController();
 
   final _stepsChanged = PublishSubject<Unit>();
 
@@ -216,7 +214,6 @@ class AddDishViewModel {
     categoryController.dispose();
     ingredientNameController.dispose();
     ingredientQuantityController.dispose();
-    newPreparationStepNameController.dispose();
     newPreparationStepsGroupNameController.dispose();
   }
 }
