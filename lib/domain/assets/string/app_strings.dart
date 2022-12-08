@@ -26,6 +26,10 @@ class AppStrings {
   static const String signUpAlreadyRegistered = "Already registered?";
   static const String signUpAlreadyRegisteredButton = "Sign in";
   static const String signUpFailedToCreateAccount = "Failed to create account!";
+  static const String signUpCollectingIngredients = "Collecting ingredients";
+  static const String signUpMixing = "Mixing";
+  static const String signUpTastingDishes = "Tasting wonderful dishes";
+  static const String signUpReadyToCook = "Ready to cook";
 
   // logout
   static const String logoutTitle = "Logout";

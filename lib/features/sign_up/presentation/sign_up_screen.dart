@@ -3,8 +3,10 @@ import 'package:cooking_app_flutter/domain/assets/graphics/graphics.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
+import 'package:cooking_app_flutter/features/sign_up/data/sign_up_step.dart';
 import 'package:cooking_app_flutter/features/sign_up/presentation/sign_up_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -56,6 +58,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
         (route) => false,
       ); // clear stack and go to dishes screen
     });
+
+    _viewModel.progressIndicatorState.listen((event) {
+      switch(event) {
+        case SignUpStep.collectingIngredients: {
+          EasyLoading.show(status: AppStrings.signUpCollectingIngredients);
+          break;
+        }
+        case SignUpStep.mixing: {
+          EasyLoading.show(status: AppStrings.signUpMixing);
+          break;
+        }
+        case SignUpStep.tastingWonderfulDishes: {
+          EasyLoading.show(status: AppStrings.signUpTastingDishes);
+          break;
+        }
+        case SignUpStep.done: {
+          EasyLoading.showSuccess(AppStrings.signUpReadyToCook);
+          break;
+        }
+        case null: {
+          EasyLoading.dismiss();
+          break;
+        }
+      }
+    });
   }
 
   @override
@@ -102,7 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: TextFormField(
                             controller: _firstNameController,
                             validator: (name) =>
-                                _viewModel.isFirstNameValid(firstName: name)
+                                _viewModel.isFirstNameValid(firstName: name?.trim())
                                     ? null
                                     : AppStrings.signUpFirstNameTextFieldHint,
                             decoration: InputDecoration(
@@ -124,7 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: TextFormField(
                             controller: _lastNameController,
                             validator: (name) =>
-                                _viewModel.isLastNameValid(lastName: name)
+                                _viewModel.isLastNameValid(lastName: name?.trim())
                                     ? null
                                     : AppStrings.signUpLastNameTextFieldHint,
                             decoration: InputDecoration(
@@ -147,7 +174,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     TextFormField(
                       controller: _emailController,
                       validator: (email) =>
-                          _viewModel.isEmailValid(email: email)
+                          _viewModel.isEmailValid(email: email?.trim())
                               ? null
                               : AppStrings.signUpEnterValidEmailMessage,
                       decoration: InputDecoration(
@@ -167,7 +194,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     TextFormField(
                       controller: _passwordController,
                       validator: (password) =>
-                          _viewModel.isPasswordValid(password: password)
+                          _viewModel.isPasswordValid(password: password?.trim())
                               ? null
                               : AppStrings.signUpPasswordTextFieldHint,
                       obscureText: true,
