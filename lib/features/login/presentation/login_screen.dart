@@ -1,4 +1,5 @@
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
+import 'package:cooking_app_flutter/domain/assets/graphics/graphics.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
@@ -28,7 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void onSignUpClicked() {
-    MainAppNav.navigator.currentState?.pushNamed(MainAppNavDestinations.signUp.route);
+    MainAppNav.navigator.currentState
+        ?.pushNamed(MainAppNavDestinations.signUp.route);
   }
 
   @override
@@ -40,7 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     _viewModel.onNavigateToDishesScreenStream.listen((event) {
-      MainAppNav.navigator.currentState?.pushReplacementNamed(MainAppNavDestinations.main.route);
+      MainAppNav.navigator.currentState
+          ?.pushReplacementNamed(MainAppNavDestinations.main.route);
     });
   }
 
@@ -55,6 +58,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Graphics.loginSingUpBackground.path),
+              fit: BoxFit.cover,
+            ),
+          ),
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -64,6 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 40,
+                  color: Colors.black,
                 ),
               ),
               const SizedBox(
@@ -74,11 +84,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: [
                     TextFormField(
+                      style: const TextStyle(color: Colors.black),
                       controller: _emailController,
-                      validator: (email) => _viewModel.isEmailValid(email: email) ? null : AppStrings.loginEnterValidEmailMessage,
+                      validator: (email) =>
+                          _viewModel.isEmailValid(email: email)
+                              ? null
+                              : AppStrings.loginEnterValidEmailMessage,
                       decoration: InputDecoration(
                         hintText: AppStrings.loginEmailTextFieldHint,
-                        prefixIcon: const Icon(Icons.email),
+                        prefixIcon: const Icon(
+                          Icons.email,
+                          color: Colors.black45,
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -87,10 +104,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     itemSpacingBox(),
                     TextFormField(
                       controller: _passwordController,
-                      validator: (password) => _viewModel.isPasswordValid(password: password) ? null : AppStrings.loginEnterPasswordMessage,
+                      validator: (password) =>
+                          _viewModel.isPasswordValid(password: password)
+                              ? null
+                              : AppStrings.loginEnterPasswordMessage,
                       obscureText: true,
                       decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock),
+                        fillColor: Colors.black,
+                        focusColor: Colors.black,
+                        prefixIcon: const Icon(
+                          Icons.lock,
+                          color: Colors.black26,
+                        ),
                         hintText: AppStrings.loginPasswordTextFieldHint,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -102,21 +127,41 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: onSignInClicked,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+                        backgroundColor: Colors.yellow,
                       ),
                       child: const Text(
                         AppStrings.loginSignInButton,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     itemSpacingBox(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(AppStrings.loginNotRegisteredYet),
+                        const Text(
+                          AppStrings.loginNotRegisteredYet,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
                         TextButton(
+                          style: ButtonStyle(
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                          ),
                           onPressed: onSignUpClicked,
-                          child:
-                              const Text(AppStrings.loginCreateAccountButton),
+                          child: const Text(
+                            AppStrings.loginCreateAccountButton,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
                         ),
                       ],
                     )
