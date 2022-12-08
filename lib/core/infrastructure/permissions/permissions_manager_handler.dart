@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 @injectable
-class PermissionsManagerImpl implements PermissionsManager {
+class PermissionsManagerHandler implements PermissionsManager {
 
   @override
   Future<bool> get arePhotosPermissionsGranted async {
