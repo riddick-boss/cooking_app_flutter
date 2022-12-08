@@ -5,5 +5,5 @@ import 'package:injectable/injectable.dart';
 @module
 abstract class RemoteDatabaseManagerModule {
   @lazySingleton
-  RemoteDatabaseManager getRemoteDatabase() => FirestoreManager();
+  RemoteDatabaseManager get remoteDatabase => FirestoreManager();
 }

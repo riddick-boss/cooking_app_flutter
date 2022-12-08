@@ -14,44 +14,46 @@ import 'package:cooking_app_flutter/domain/util/cast.dart';
 import 'package:cooking_app_flutter/domain/util/extension/behavior_subject_list_extension.dart';
 import 'package:cooking_app_flutter/domain/util/extension/list_extension.dart';
 import 'package:cooking_app_flutter/domain/util/unit.dart';
+import 'package:cooking_app_flutter/features/add_dish/data/dish_upload_status.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/subjects.dart';
 
 @injectable
-class AddDishViewModel { // add remote source ?
+class AddDishViewModel {
   final _dbManager = getIt<RemoteDatabaseManager>();
   final _permissionsManager = getIt<PermissionsManager>();
   final _imagePicker = getIt<ImagePicker>();
 
   final _showSnackBarSubject = PublishSubject<String>();
+
   Stream<String> get showSnackBarStream => _showSnackBarSubject.stream;
 
+  //name
   final _dishName = BehaviorSubject<String>.seeded('');
+
   Stream<String> get dishName => _dishName.stream;
 
-  void onDishNameChanged(String value) {
-    _dishName.add(value);
-  }
+  final dishNameController = TextEditingController();
 
-  final _dishCategory = BehaviorSubject<String>.seeded('');
-  Stream<String> get dishCategory => _dishCategory.stream;
+  //category
+  final categoryController = TextEditingController();
 
-  void onDishCategoryChanged(String value) {
-    _dishCategory.add(value);
-  }
-
+  //preparationTime
   final _preparationTime = BehaviorSubject<int>.seeded(0);
+
   Stream<int> get preparationTime => _preparationTime.stream;
 
   void onPreparationTimeChanged(dynamic value) {
-    final time = cast<int>(value);
-    if(time == null || time < 0) return;
+    final time = cast<int?>(value);
+    if (time == null || time < 0) return;
     _preparationTime.add(time);
   }
 
+  //photos
   final _photosPaths = BehaviorSubject<List<String>>.seeded(List.empty());
+
   Stream<List<String>> get photosPathsStream => _photosPaths.stream;
 
   List<DishPhoto> _createDishPhotosList(List<String> photosPaths) => photosPaths
@@ -60,11 +62,13 @@ class AddDishViewModel { // add remote source ?
 
   Future<void> onPickPhotoClicked() async {
     if (!(await _permissionsManager.arePhotosPermissionsGranted)) {
-      _showSnackBarSubject.add(AppStrings.addDishPermissionsDeniedSnackBarMessage);
+      _showSnackBarSubject
+          .add(AppStrings.addDishPermissionsDeniedSnackBarMessage);
       return;
     }
 
-    final pickedPhoto = await _imagePicker.pickImage(source: ImageSource.gallery);
+    final pickedPhoto =
+        await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedPhoto == null) return;
     _photosPaths.addElement(pickedPhoto.path);
   }
@@ -73,32 +77,25 @@ class AddDishViewModel { // add remote source ?
     _photosPaths.removeElement(path);
   }
 
-  final _newIngredientName = BehaviorSubject<String>.seeded("");
-  Stream<String> get newIngredientName => _newIngredientName.stream; // TODO: needed?
-
-  void onNewIngredientNameChanged(String value) {
-    _newIngredientName.add(value);
-  }
-
-  final _newIngredientQuantity = BehaviorSubject<String?>.seeded(null);
-  Stream<String?> get newIngredientQuantity => _newIngredientQuantity.stream; // TODO: needed?
-
-  void onNewIngredientQuantityChanged(String value) {
-    _newIngredientQuantity.add(value);
-  }
-  
+  //ingredients
   final _ingredients = BehaviorSubject<List<Ingredient>>.seeded(List.empty());
+
   Stream<List<Ingredient>> get ingredients => _ingredients.stream;
 
-  final _clearNewIngredientTextFields = PublishSubject<Unit>();
-  Stream<Unit> get clearNewIngredientTextFields => _clearNewIngredientTextFields.stream;
+  final ingredientNameController = TextEditingController();
 
-  void onAddIngredientClicked() { // fixme: after adding ingredient textField clears, but next ingredient keeps value
-    final name = _newIngredientName.value;
-    final quantity = _newIngredientQuantity.value;
+  final ingredientQuantityController = TextEditingController();
+
+  void onAddIngredientClicked() {
+    final name = ingredientNameController.text;
     if (name.isEmpty) return;
-    _ingredients.addElement(Ingredient(name: name, quantity: quantity));
-    _clearNewIngredientTextFields.add(Unit());
+    String? quantity = ingredientQuantityController.text;
+    if (quantity.isEmpty) quantity = null;
+    _ingredients.addElement(
+      Ingredient(name: ingredientNameController.text, quantity: quantity),
+    );
+    ingredientNameController.clear();
+    ingredientQuantityController.clear();
   }
 
   void onRemoveIngredientClicked(Ingredient ingredient) {
@@ -106,70 +103,65 @@ class AddDishViewModel { // add remote source ?
   }
 
   void onIngredientsReordered(int oldIdx, int newIdx) {
-    final list = List<Ingredient>.from(_ingredients.value)..reorder(oldIdx, newIdx);
+    final list = List<Ingredient>.from(_ingredients.value)
+      ..reorder(oldIdx, newIdx);
     _ingredients.add(list);
   }
 
-  final _preparationStepsGroups = BehaviorSubject<Map<String, List<String>>>.seeded({});
-  Stream<Map<String, List<String>>> get preparationStepsGroups => _preparationStepsGroups.stream;
+  //preparation steps
+  final _preparationStepsGroups =
+      BehaviorSubject<Map<String, List<String>>>.seeded({});
 
-  final _newPreparationStepsGroupName = BehaviorSubject<String>.seeded("");
-  Stream<String> get newPreparationStepsGroupName => _newPreparationStepsGroupName.stream; // TODO: needed?
+  Stream<Map<String, List<String>>> get preparationStepsGroups =>
+      _preparationStepsGroups.stream;
 
-  void onNewPreparationStepsGroupNameChanged(String value) {
-    _newPreparationStepsGroupName.add(value);
-  }
-
-  final _clearNewPreparationStepsGroupTextField = PublishSubject<Unit>();
-  Stream<Unit> get clearNewPreparationStepsGroupTextField => _clearNewPreparationStepsGroupTextField.stream;
+  final newPreparationStepsGroupNameController = TextEditingController();
 
   void onAddPreparationStepsGroupClicked() {
-    final name = _newPreparationStepsGroupName.value;
+    final name = newPreparationStepsGroupNameController.text;
     if (name.isEmpty || _preparationStepsGroups.value.containsKey(name)) return;
-    final newMap = Map<String, List<String>>.from(_preparationStepsGroups.value)..[name] = List<String>.empty();
+    final newMap = Map<String, List<String>>.from(_preparationStepsGroups.value)
+      ..[name] = List<String>.empty();
     _preparationStepsGroups.add(newMap);
-    _clearNewPreparationStepsGroupTextField.add(Unit());
+    newPreparationStepsGroupNameController.clear();
   }
 
   void onRemovePreparationStepsGroupClicked(String key) {
-    final newMap = Map<String, List<String>>.from(_preparationStepsGroups.value)..remove(key);
+    final newMap = Map<String, List<String>>.from(_preparationStepsGroups.value)
+      ..remove(key);
     _preparationStepsGroups.add(newMap);
   }
 
   final _stepsChanged = PublishSubject<Unit>();
+
   Stream<Unit> get stepsChanged => _stepsChanged.stream;
 
-  final _newPreparationStep = BehaviorSubject<String>.seeded("");
-  Stream<String> get newPreparationStep => _newPreparationStep.stream; // TODO: needed?
-
-  void onNewPreparationStepNameChanged(String value) {
-    _newPreparationStep.add(value);
-  }
-
-  void onPreparationStepAdded(String groupName) {
-    final step = _newPreparationStep.value;
+  void onAddPreparationStepClicked(String groupName, String step) {
     final steps = _preparationStepsGroups.value[groupName];
-    if(steps == null) return;
+    if (steps == null) return;
     final newSteps = List<String>.from(steps)..add(step);
-    final groups = Map<String, List<String>>.from(_preparationStepsGroups.value)..[groupName] = newSteps;
+    final groups = Map<String, List<String>>.from(_preparationStepsGroups.value)
+      ..[groupName] = newSteps;
     _preparationStepsGroups.add(groups);
     _stepsChanged.add(Unit());
   }
 
   void onPreparationStepsReordered(String groupName, int oldIdx, int newIdx) {
     final steps = _preparationStepsGroups.value[groupName];
-    if(steps == null || steps.isEmpty) return;
+    if (steps == null || steps.isEmpty) return;
     final newSteps = List<String>.from(steps)..reorder(oldIdx, newIdx);
-    final groups = Map<String, List<String>>.from(_preparationStepsGroups.value)..[groupName] = newSteps;
+    final groups = Map<String, List<String>>.from(_preparationStepsGroups.value)
+      ..[groupName] = newSteps;
     _preparationStepsGroups.add(groups);
     _stepsChanged.add(Unit());
   }
 
-  void onPreparationStepRemoved(String groupName, String step) {
+  void onRemovePreparationStepClicked(String groupName, String step) {
     final steps = _preparationStepsGroups.value[groupName];
-    if(steps == null) return;
+    if (steps == null) return;
     final newSteps = List<String>.from(steps)..remove(step);
-    final groups = Map<String, List<String>>.from(_preparationStepsGroups.value)..[groupName] = newSteps;
+    final groups = Map<String, List<String>>.from(_preparationStepsGroups.value)
+      ..[groupName] = newSteps;
     _preparationStepsGroups.add(groups);
     _stepsChanged.add(Unit());
   }
@@ -179,7 +171,11 @@ class AddDishViewModel { // add remote source ?
     var sortOrder = 0;
     _preparationStepsGroups.value.forEach((groupName, stepsNames) {
       final steps = _createPreparationSteps(stepsNames);
-      final group = PreparationStepsGroup(name: groupName, sortOrder: sortOrder, steps: steps);
+      final group = PreparationStepsGroup(
+        name: groupName,
+        sortOrder: sortOrder,
+        steps: steps,
+      );
       groups.add(group);
       sortOrder++;
     });
@@ -187,23 +183,54 @@ class AddDishViewModel { // add remote source ?
   }
 
   List<PreparationStep> _createPreparationSteps(List<String> stepsNames) =>
-      stepsNames.mapIndexed((index, name) => PreparationStep(name: name, sortOrder: index)).toList();
+      stepsNames
+          .mapIndexed(
+            (index, name) => PreparationStep(name: name, sortOrder: index),
+          )
+          .toList();
 
+  //progress indicator
+  final _progressIndicatorStatus =
+      BehaviorSubject<DishUploadStatus?>.seeded(null);
+
+  Stream<DishUploadStatus?> get progressIndicatorStatus =>
+      _progressIndicatorStatus.stream;
+
+  Future<void> _showProgressStatusAndDismiss(DishUploadStatus status) async {
+    _progressIndicatorStatus.add(status);
+    await Future.delayed(const Duration(seconds: 4), () {});
+    _progressIndicatorStatus.add(null);
+  }
+
+  //create dish
   Future<void> onCreateDishClicked() async {
     final dish = Dish(
-      category: _dishCategory.value,
+      category: categoryController.text,
       preparationTimeInMinutes: _preparationTime.value,
-      name: _dishName.value,
+      name: dishNameController.text,
       ingredients: _ingredients.value,
       preparationStepsGroups: _createPreparationStepsGroups(),
       photos: _createDishPhotosList(_photosPaths.value),
     );
+    _progressIndicatorStatus.add(DishUploadStatus.uploading);
     try {
       await _dbManager.createDish(dish);
-      // TODO: show info to user
+      await _showProgressStatusAndDismiss(DishUploadStatus.success);
+      _showSnackBarSubject
+          .add(AppStrings.addDishCreationSuccessSnackBarMessage);
     } catch (e) {
-      debugPrint("error during dish creation: $e");
-      //TODO: show  info to user
+      await _showProgressStatusAndDismiss(DishUploadStatus.failure);
+      _showSnackBarSubject
+          .add(AppStrings.addDishCreationFailureSnackBarMessage);
     }
+  }
+
+  //dispose
+  void dispose() {
+    dishNameController.dispose();
+    categoryController.dispose();
+    ingredientNameController.dispose();
+    ingredientQuantityController.dispose();
+    newPreparationStepsGroupNameController.dispose();
   }
 }
