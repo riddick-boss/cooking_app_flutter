@@ -5,5 +5,5 @@ import 'package:injectable/injectable.dart';
 @module
 abstract class AuthManagerModule {
   @lazySingleton
-  AuthManager getAuthManager() => FirebaseAuthManager();
+  AuthManager get authManager => FirebaseAuthManager();
 }

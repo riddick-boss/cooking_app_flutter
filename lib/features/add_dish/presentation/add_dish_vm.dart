@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
@@ -23,7 +22,6 @@ import 'package:rxdart/subjects.dart';
 
 @injectable
 class AddDishViewModel {
-  // TODO: add remote source ?
   final _dbManager = getIt<RemoteDatabaseManager>();
   final _permissionsManager = getIt<PermissionsManager>();
   final _imagePicker = getIt<ImagePicker>();
@@ -63,11 +61,11 @@ class AddDishViewModel {
       .toList(growable: false);
 
   Future<void> onPickPhotoClicked() async {
-    // if (!(await _permissionsManager.arePhotosPermissionsGranted)) {
-    //   _showSnackBarSubject
-    //       .add(AppStrings.addDishPermissionsDeniedSnackBarMessage);
-    //   return;
-    // }
+    if (!(await _permissionsManager.arePhotosPermissionsGranted)) {
+      _showSnackBarSubject
+          .add(AppStrings.addDishPermissionsDeniedSnackBarMessage);
+      return;
+    }
 
     final pickedPhoto =
         await _imagePicker.pickImage(source: ImageSource.gallery);
@@ -200,7 +198,7 @@ class AddDishViewModel {
 
   Future<void> _showProgressStatusAndDismiss(DishUploadStatus status) async {
     _progressIndicatorStatus.add(status);
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 4), () {});
     _progressIndicatorStatus.add(null);
   }
 
