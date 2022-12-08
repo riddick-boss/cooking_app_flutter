@@ -5,6 +5,7 @@ import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
 import 'package:cooking_app_flutter/features/login/presentation/login_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -45,6 +46,14 @@ class _LoginScreenState extends State<LoginScreen> {
       MainAppNav.navigator.currentState
           ?.pushReplacementNamed(MainAppNavDestinations.main.route);
     });
+
+    _viewModel.progressIndicatorVisible.listen((visible) {
+      if(visible) {
+        EasyLoading.show();
+      } else {
+        EasyLoading.dismiss();
+      }
+    });
   }
 
   @override
@@ -84,7 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: [
                     TextFormField(
-                      style: const TextStyle(color: Colors.black),
                       controller: _emailController,
                       validator: (email) =>
                           _viewModel.isEmailValid(email: email)
@@ -110,11 +118,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               : AppStrings.loginEnterPasswordMessage,
                       obscureText: true,
                       decoration: InputDecoration(
-                        fillColor: Colors.black,
-                        focusColor: Colors.black,
                         prefixIcon: const Icon(
                           Icons.lock,
-                          color: Colors.black26,
+                          color: Colors.black45,
                         ),
                         hintText: AppStrings.loginPasswordTextFieldHint,
                         border: OutlineInputBorder(
