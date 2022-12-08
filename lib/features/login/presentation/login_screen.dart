@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                       controller: _emailController,
                       validator: (email) =>
-                          _viewModel.isEmailValid(email: email)
+                          _viewModel.isEmailValid(email: email?.trim())
                               ? null
                               : AppStrings.loginEnterValidEmailMessage,
                       decoration: InputDecoration(
@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                       controller: _passwordController,
                       validator: (password) =>
-                          _viewModel.isPasswordValid(password: password)
+                          _viewModel.isPasswordValid(password: password?.trim())
                               ? null
                               : AppStrings.loginEnterPasswordMessage,
                       obscureText: true,
