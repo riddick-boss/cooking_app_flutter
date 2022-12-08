@@ -202,6 +202,9 @@ class AddDishViewModel {
     _progressIndicatorStatus.add(null);
   }
 
+  final _navigateToDishesList = BehaviorSubject<Unit>();
+  Stream<Unit> get navigateToDishesList => _navigateToDishesList.stream;
+
   //create dish
   Future<void> onCreateDishClicked() async {
     final dish = Dish(
@@ -216,8 +219,7 @@ class AddDishViewModel {
     try {
       await _dbManager.createDish(dish);
       await _showProgressStatusAndDismiss(DishUploadStatus.success);
-      _showSnackBarSubject
-          .add(AppStrings.addDishCreationSuccessSnackBarMessage);
+      _navigateToDishesList.add(Unit());
     } catch (e) {
       await _showProgressStatusAndDismiss(DishUploadStatus.failure);
       _showSnackBarSubject
