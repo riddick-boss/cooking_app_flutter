@@ -22,7 +22,7 @@ class DishCard extends StatelessWidget {
               offset: Offset(0, 9),
             )
           ],
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(35),
           color: Colors.blueAccent,
         ),
         child: InkWell(
