@@ -12,6 +12,9 @@
 .history
 .svn/
 
+#Mocks
+*.mocks.dart
+
 # IntelliJ related
 *.iml
 *.ipr
