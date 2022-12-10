@@ -27,4 +27,8 @@ class DishesViewModel {
     }
     _dishesSubject.add(dishes);
   }
+
+  Future<void> refreshDishes() async {
+    await getDishes();
+  }
 }

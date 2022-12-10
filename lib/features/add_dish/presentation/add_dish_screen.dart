@@ -2,6 +2,7 @@ import 'package:bottom_picker/bottom_picker.dart';
 import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/ingredient.dart';
+import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/domain/presentation/widget/platform_aware_image.dart';
 import 'package:cooking_app_flutter/domain/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/domain/util/snack_bar.dart';
@@ -54,6 +55,10 @@ class _AddDishScreenState extends State<AddDishScreen> {
             break;
           }
       }
+    });
+    
+    _viewModel.navigateToDishesList.listen((event) {
+      MainAppNav.navigator.currentState?.pop();
     });
   }
 
