@@ -44,7 +44,7 @@ class _ScreenState extends State<_Screen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: const Color.fromARGB(255, 243, 195, 13),
+        backgroundColor: const Color.fromARGB(255, 117, 216, 239),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -57,7 +57,7 @@ class _ScreenState extends State<_Screen> {
 
             if (dish == null) {
               return const ColoredBox(
-                color: Colors.blueAccent,
+                color: Colors.lightBlueAccent,
                 child: Center(
                   child: CircularProgressIndicator.adaptive(),
                 ),
@@ -76,7 +76,7 @@ class _ScreenState extends State<_Screen> {
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
                       ),
-                      color: Color.fromARGB(221, 243, 85, 37),
+                      color: Colors.lightBlue,
                     ),
                     child: ListView(
                       padding: const EdgeInsets.symmetric(vertical: 18),
