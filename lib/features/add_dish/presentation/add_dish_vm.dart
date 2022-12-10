@@ -207,6 +207,16 @@ class AddDishViewModel {
 
   //create dish
   Future<void> onCreateDishClicked() async {
+
+    if(_ingredients.value.isEmpty) {
+      _showSnackBarSubject.add(AppStrings.addDishIngredientsEmptySnackBarMessage);
+      return;
+    }
+    if(_preparationStepsGroups.value.isEmpty) {
+      _showSnackBarSubject.add(AppStrings.addDishPreparationStepsEmptySnackBarMessage);
+      return;
+    }
+
     final dish = Dish(
       category: categoryController.text,
       preparationTimeInMinutes: _preparationTime.value,
