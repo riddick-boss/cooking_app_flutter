@@ -6,9 +6,11 @@ import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_mana
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/manager/remote_database_manager.dart';
 import 'package:cooking_app_flutter/domain/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/domain/util/unit.dart';
+import 'package:cooking_app_flutter/features/sign_up/data/sign_up_step.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/subjects.dart';
 
 // TODO: use rxDart
 
@@ -23,13 +25,22 @@ class SignUpViewModel {
   final _showCreateAccountErrorSnackBarController = StreamController<String>.broadcast();
   Stream<String> get showLoginErrorSnackBarStream => _showCreateAccountErrorSnackBarController.stream;
 
+  final _progressIndicatorStatus = BehaviorSubject<SignUpStep?>.seeded(null);
+  Stream<SignUpStep?> get progressIndicatorState => _progressIndicatorStatus.stream;
+
   Future<void> createUserWithEmailAndPassword({required String email, required String password, required String firstName, required String lastName}) async {
     try {
+      _progressIndicatorStatus.add(SignUpStep.collectingIngredients);
       await _authManager.createUserWithEmailAndPassword(email: email, password: password);
+      _progressIndicatorStatus.add(SignUpStep.mixing);
       final userDisplayValue = (lastName.isBlankOrEmpty) ? firstName : "$firstName $lastName";
       await _authManager.updateDisplayNameWithDisplayValue(displayValue: userDisplayValue);
+      _progressIndicatorStatus.add(SignUpStep.tastingWonderfulDishes);
       final userUid = _authManager.currentUser!.uid;
       await _remoteDatabase.initUserCollection(userUid: userUid, firstName: firstName, lastName: lastName);
+      _progressIndicatorStatus.add(SignUpStep.done);
+      await Future.delayed(const Duration(seconds: 3), () {});
+      _progressIndicatorStatus.add(null);
       _onNavigateToDishesScreenController.add(Unit());
     } catch(e) {
       debugPrint("create account error: $e");
