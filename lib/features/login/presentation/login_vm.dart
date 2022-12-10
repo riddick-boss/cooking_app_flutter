@@ -8,6 +8,7 @@ import 'package:cooking_app_flutter/domain/util/unit.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/subjects.dart';
 
 //TODO: use RxDart
 
@@ -21,7 +22,11 @@ class LoginViewModel {
   final _showLoginErrorSnackBarController = StreamController<String>.broadcast();
   Stream<String> get showLoginErrorSnackBarStream => _showLoginErrorSnackBarController.stream;
 
+  final _progressIndicatorVisible = BehaviorSubject<bool>.seeded(false);
+  Stream<bool> get progressIndicatorVisible => _progressIndicatorVisible.stream;
+
   Future<void> onSignInClicked({required String email, required String password}) async {
+    _progressIndicatorVisible.add(true);
     try {
       await _authManager.signInWithEmailAndPassword(email: email, password: password);
       _onNavigateToDishesScreenController.add(Unit());
@@ -29,6 +34,7 @@ class LoginViewModel {
       debugPrint("login failed: $e");
       _showLoginErrorSnackBarController.add(AppStrings.loginFailedToLogin);
     }
+    _progressIndicatorVisible.add(false);
   }
 
   bool isEmailValid({required String? email}) => email != null && EmailValidator.validate(email);

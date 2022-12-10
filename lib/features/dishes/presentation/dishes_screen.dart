@@ -33,26 +33,30 @@ class _DishesScreenState extends State<DishesScreen> {
   @override
   Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: StreamBuilder<List<Dish>>(
-        stream: _viewModel.dishesStream,
-        builder: (context, snapshot) {
-          final dishes = snapshot.data ?? List.empty();
+      child: RefreshIndicator(
+        backgroundColor: Colors.deepOrange,
+        onRefresh: _viewModel.refreshDishes,
+        child: StreamBuilder<List<Dish>>(
+          stream: _viewModel.dishesStream,
+          builder: (context, snapshot) {
+            final dishes = snapshot.data ?? List.empty();
 
-          if(dishes.isEmpty) { // TODO: what in case of exception?
-            return const Center(
-              child: CircularProgressIndicator.adaptive(),
+            if(dishes.isEmpty) { // TODO: what in case of exception?
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }
+
+            return ListView(
+              physics: const AlwaysScrollableScrollPhysics().applyTo(const BouncingScrollPhysics()),
+                clipBehavior: Clip.antiAlias,
+                children: [
+                  for(final dish in dishes)
+                    DishCard(key: ValueKey(dish.dishId!), dish: dish, onTap: (e) { onDishClicked(e.dishId!); })
+                ],
             );
-          }
-
-          return ListView(
-              physics: const BouncingScrollPhysics(),
-              clipBehavior: Clip.antiAlias,
-              children: [
-                for(final dish in dishes)
-                  DishCard(key: ValueKey(dish.dishId!), dish: dish, onTap: (e) { onDishClicked(e.dishId!); })
-              ],
-          );
-        },
+          },
+        ),
       ),
     );
 }
