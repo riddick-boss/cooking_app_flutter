@@ -4,13 +4,12 @@ import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_mana
 import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
 import 'package:cooking_app_flutter/domain/presentation/loading/eay_loading_configurator.dart';
 import 'package:cooking_app_flutter/domain/presentation/theme/colors.dart';
-import 'package:cooking_app_flutter/firebase/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cooking_app_flutter/firebase/firebase_initializer.dart';
 import 'package:flutter/material.dart';
 
 Future<dynamic> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseInitializer.init();
   configureInjection();
 
   final authManager = getIt<AuthManager>();

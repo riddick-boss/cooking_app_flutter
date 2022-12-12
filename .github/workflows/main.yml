@@ -19,5 +19,10 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+      - name: Decode secrets
+        - run: echo $SECRET_DOT_ENV | base64 -d > .env
+        - env:
+            SECRET_DOT_ENV: ${{ secrets.SECRET_DOT_ENV }}
       - run: flutter pub get
+      - run: flutter pub run build_runner build --delete-conflicting-outputs
       - run: flutter test

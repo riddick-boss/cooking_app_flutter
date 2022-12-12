@@ -50,6 +50,8 @@ dependencies:
   bottom_picker: ^2.0.1
 # EasyLoading
   flutter_easyloading: ^3.0.5
+#  Use environment variables
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -66,3 +68,4 @@ flutter:
 
   assets:
     - assets/graphics/
+    - .env
