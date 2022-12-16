@@ -13,6 +13,7 @@ import 'package:cooking_app_flutter/domain/infrastructure/permissions/permission
 import 'package:cooking_app_flutter/domain/util/cast.dart';
 import 'package:cooking_app_flutter/domain/util/extension/behavior_subject_list_extension.dart';
 import 'package:cooking_app_flutter/domain/util/extension/list_extension.dart';
+import 'package:cooking_app_flutter/domain/util/extension/string_extension.dart';
 import 'package:cooking_app_flutter/domain/util/unit.dart';
 import 'package:cooking_app_flutter/features/add_dish/data/dish_upload_status.dart';
 import 'package:flutter/material.dart';
@@ -31,10 +32,6 @@ class AddDishViewModel {
   Stream<String> get showSnackBarStream => _showSnackBarSubject.stream;
 
   //name
-  final _dishName = BehaviorSubject<String>.seeded('');
-
-  Stream<String> get dishName => _dishName.stream;
-
   final dishNameController = TextEditingController();
 
   //category
@@ -208,14 +205,7 @@ class AddDishViewModel {
   //create dish
   Future<void> onCreateDishClicked() async {
 
-    if(_ingredients.value.isEmpty) {
-      _showSnackBarSubject.add(AppStrings.addDishIngredientsEmptySnackBarMessage);
-      return;
-    }
-    if(_preparationStepsGroups.value.isEmpty) {
-      _showSnackBarSubject.add(AppStrings.addDishPreparationStepsEmptySnackBarMessage);
-      return;
-    }
+    if(!_isDishValid()) return;
 
     final dish = Dish(
       category: categoryController.text,
@@ -235,6 +225,33 @@ class AddDishViewModel {
       _showSnackBarSubject
           .add(AppStrings.addDishCreationFailureSnackBarMessage);
     }
+  }
+
+  bool _isDishValid() {
+    final message = _getErrorMessage();
+
+    if(message != null) {
+      _showSnackBarSubject.add(message);
+      return false;
+    }
+    return true;
+  }
+
+  String? _getErrorMessage() {
+    String? message;
+    if(dishNameController.text.isBlankOrEmpty) {
+      message = AppStrings.addDishNameInvalidSnackBarMessage;
+    }
+    else if(_preparationTime.value <= 0) {
+      message = AppStrings.addDishPreparationTimeSnackBarMessage;
+    }
+    else if(_ingredients.value.isEmpty) {
+      message = AppStrings.addDishIngredientsEmptySnackBarMessage;
+    }
+    else if(_preparationStepsGroups.value.isEmpty) {
+      message = AppStrings.addDishPreparationStepsEmptySnackBarMessage;
+    }
+    return message;
   }
 
   //dispose
