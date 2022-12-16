@@ -12,6 +12,9 @@
 .history
 .svn/
 
+#Mocks
+*.mocks.dart
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -835,6 +838,8 @@ Temporary Items
 
 # Include any specific files here.
 
+*.freezed.dart
+*.config.dart
 
 ### ---------------------------- References ---------------------------- ###
 
