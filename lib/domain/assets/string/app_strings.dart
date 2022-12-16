@@ -59,6 +59,10 @@ class AppStrings {
   static const String addDishStepLabel = "Step name";
   static const String addDishSubmitPreparationTimeButton = "Submit";
   static const String addDishCreationFailureSnackBarMessage = "Dish creation failure! Try again in a moment!";
+  static const String addDishNameInvalidSnackBarMessage = "Name cannot be blank!";
+  static const String addDishPreparationTimeSnackBarMessage = "Preparation time must be greater than 0!";
+  static const String addDishIngredientsEmptySnackBarMessage = "Ingredients cannot be empty!";
+  static const String addDishPreparationStepsEmptySnackBarMessage = "Preparation steps cannot be empty!";
   static const String addDishUploading = "Creating dish...";
   static String addDishPreparationTime(int time) => 'Preparation time: $time';
 
