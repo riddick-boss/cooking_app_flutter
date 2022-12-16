@@ -10,7 +10,7 @@ class MainAppNav { // TODO: named routes are no longer recommended (https://docs
 
   static const destinations = MainAppNavDestinations.values;
   
-  static final routesMap = { for (var e in destinations) e.route : (BuildContext context) => e.screen(context) };
+  static final routesMap = { for (var dest in destinations) dest.route : (BuildContext context) => dest.screen(context) };
 }
 
 enum MainAppNavDestinations {
