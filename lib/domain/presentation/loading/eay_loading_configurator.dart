@@ -6,7 +6,6 @@ class EasyLoadingConfigurator {
     final initialization = EasyLoading.init();
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.cubeGrid
-      // ..loadingStyle = EasyLoadingStyle.
       ..maskType = EasyLoadingMaskType.black
       ..dismissOnTap = false
       ..userInteractions = false;

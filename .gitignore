@@ -12,6 +12,9 @@
 .history
 .svn/
 
+#Mocks
+*.mocks.dart
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -834,11 +837,6 @@ Temporary Items
 ### ------------------------- Project Specific ------------------------- ###
 
 # Include any specific files here.
-
-#web
-web/firebase-config.js
-
-lib/firebase/firebase_options.dart
 
 *.freezed.dart
 *.config.dart
