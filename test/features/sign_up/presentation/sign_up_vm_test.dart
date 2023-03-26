@@ -13,7 +13,7 @@ void main() {
     ..registerSingleton<AuthManager>(MockAuthManager())
     ..registerSingleton<RemoteDatabaseManager>(MockRemoteDatabaseManager());
 
-  final viewModel = SignUpViewModel();
+  final viewModel = SignUpViewModel(MockAuthManager(), MockRemoteDatabaseManager());
 
   test("first name validation returns false when name is null", () {
     expect(viewModel.isFirstNameValid(firstName: null), false);

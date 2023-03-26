@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/manager/remote_database_manager.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish.dart';
@@ -23,9 +22,11 @@ import 'package:rxdart/subjects.dart';
 
 @injectable
 class AddDishViewModel {
-  final _dbManager = getIt<RemoteDatabaseManager>();
-  final _permissionsManager = getIt<PermissionsManager>();
-  final _imagePicker = getIt<ImagePicker>();
+  AddDishViewModel(this._imagePicker, this._permissionsManager, this._dbManager);
+
+  final RemoteDatabaseManager _dbManager;
+  final PermissionsManager _permissionsManager;
+  final ImagePicker _imagePicker;
 
   final _showSnackBarSubject = PublishSubject<String>();
 
