@@ -7,7 +7,6 @@ import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/fir
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/dto/firestore_preparation_steps_group.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/firestore_constants.dart';
 import 'package:cooking_app_flutter/core/infrastructure/data/database/remote/firebase/mapper/dish_mapper.dart';
-import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_manager.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/manager/remote_database_manager.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish.dart';
@@ -17,8 +16,10 @@ import 'package:injectable/injectable.dart';
 @lazySingleton
 @injectable
 class FirestoreManager implements RemoteDatabaseManager {
-  final _firestore = getIt<FirebaseFirestore>();
-  final _authManager = getIt<AuthManager>();
+  FirestoreManager(this._authManager, this._firestore);
+
+  final FirebaseFirestore _firestore;
+  final AuthManager _authManager;
 
   String get _userId => _authManager.currentUser!.uid;
   CollectionRef get _usersCollection => _firestore.collection(FirestoreConstants.usersCollection);

@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/model/dish/dish.dart';
 import 'package:cooking_app_flutter/features/dishes/data/dishes_source.dart';
@@ -9,7 +8,9 @@ import 'package:rxdart/subjects.dart';
 
 @injectable
 class DishesViewModel {
-  final _dishesSource = getIt<DishesSource>();
+  DishesViewModel(this._dishesSource);
+
+  final DishesSource _dishesSource;
 
   final _dishesSubject = BehaviorSubject<List<Dish>>.seeded(List.empty());
   Stream<List<Dish>> get dishesStream => _dishesSubject.stream;

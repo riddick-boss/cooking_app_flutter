@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_manager.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/manager/remote_database_manager.dart';
@@ -16,8 +15,10 @@ import 'package:rxdart/subjects.dart';
 
 @injectable
 class SignUpViewModel {
-  final _authManager = getIt<AuthManager>();
-  final _remoteDatabase = getIt<RemoteDatabaseManager>();
+  SignUpViewModel(this._authManager, this._remoteDatabase);
+
+  final AuthManager _authManager;
+  final RemoteDatabaseManager _remoteDatabase;
 
   final _onNavigateToDishesScreenController = StreamController<Unit>.broadcast();
   Stream<Unit> get onNavigateToDishesScreenStream => _onNavigateToDishesScreenController.stream;

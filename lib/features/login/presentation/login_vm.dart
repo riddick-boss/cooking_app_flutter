@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/assets/string/app_strings.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_manager.dart';
 import 'package:cooking_app_flutter/domain/util/extension/string_extension.dart';
@@ -14,7 +13,9 @@ import 'package:rxdart/subjects.dart';
 
 @injectable
 class LoginViewModel {
-  final _authManager = getIt<AuthManager>();
+  LoginViewModel(this._authManager);
+
+  final AuthManager _authManager;
 
   final _onNavigateToDishesScreenController = StreamController<Unit>.broadcast();
   Stream<Unit> get onNavigateToDishesScreenStream => _onNavigateToDishesScreenController.stream;
