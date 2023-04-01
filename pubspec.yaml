@@ -22,7 +22,7 @@ dependencies:
   json_serializable: ^6.5.4
   json_annotation: ^4.7.0
 #   Linting
-  very_good_analysis: ^3.1.0
+  very_good_analysis: ^4.0.0+1
 #   Icons
   cupertino_icons: ^1.0.5
 #   Data classes generator
@@ -53,7 +53,7 @@ dependencies:
 #   Use environment variables
   flutter_dotenv: ^5.0.2
 #   Launcher icon
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.12.0
 
 dev_dependencies:
   flutter_test:
