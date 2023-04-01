@@ -1,4 +1,3 @@
-import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_manager.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/data/database/remote/manager/remote_database_manager.dart';
 import 'package:cooking_app_flutter/features/login/presentation/login_vm.dart';
@@ -9,11 +8,11 @@ import 'login_vm_test.mocks.dart';
 
 @GenerateMocks([AuthManager, RemoteDatabaseManager])
 void main() {
-  getIt
-    ..registerSingleton<AuthManager>(MockAuthManager())
-    ..registerSingleton<RemoteDatabaseManager>(MockRemoteDatabaseManager());
+  late LoginViewModel viewModel;
 
-  final viewModel = LoginViewModel(MockAuthManager());
+  setUp(() {
+    viewModel = LoginViewModel(MockAuthManager());
+  });
 
   test("email validation returns false when is null", () {
     expect(viewModel.isEmailValid(email: null), false);
@@ -40,9 +39,9 @@ void main() {
 
   test("password validation returns false when is blank", () {
     expect(
-      viewModel.isPasswordValid(password: "        "),
+      viewModel.isPasswordValid(password: "        "), // DO NOT CHANGE: intentionally left blank
       false,
-    ); // DO NOT CHANGE: intentionally left blank
+    );
   });
 
   test("password validation returns true when conditions met", () {

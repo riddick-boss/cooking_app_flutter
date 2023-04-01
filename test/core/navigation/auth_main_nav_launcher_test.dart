@@ -1,5 +1,4 @@
 import 'package:cooking_app_flutter/core/navigation/auth_main_nav_launcher.dart';
-import 'package:cooking_app_flutter/di/cooking_app_injection.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/auth/manager/auth_manager.dart';
 import 'package:cooking_app_flutter/domain/infrastructure/auth/model/auth_user.dart';
 import 'package:cooking_app_flutter/domain/navigation/main_app_nav.dart';
@@ -11,10 +10,13 @@ import 'auth_main_nav_launcher_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<AuthManager>()])
 void main() {
-  getIt.registerSingleton<AuthManager>(MockAuthManager());
+  late AuthManager mockAuthManager;
+  late AuthMainNavLauncher navLauncher;
 
-  final mockAuthManager = MockAuthManager();
-  final navLauncher = AuthMainNavLauncher(mockAuthManager);
+  setUp(() {
+    mockAuthManager = MockAuthManager();
+    navLauncher = AuthMainNavLauncher(mockAuthManager);
+  });
 
   test("initialRoute is login when user not logged in", () {
     when(mockAuthManager.currentUser).thenReturn(null);
